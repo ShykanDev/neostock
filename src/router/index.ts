@@ -7,6 +7,11 @@ const routes: Array<RouteRecordRaw> = [
     name: 'home',
     component: HomeView
   },  
+  {
+    path: '/scan',
+    name: 'scan',
+    component: () => import(/* webpackChunkName: "scan" */ '../views/ScanProductView.vue')
+  }
 ]
 
 const router = createRouter({

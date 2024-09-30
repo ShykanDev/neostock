@@ -1,9 +1,11 @@
 <template>
-    <div class="bg-slate-100">
+    <div class="flex bg-slate-100 w-dvw">
         <!-- Top bar -->
-         <slot name="top-bar">
-            <MainTopBar/>
+       <div class="z-50">
+        <slot name="top-bar">
+            <MainTopBar />
          </slot>
+       </div>
          
          <!-- Main content -->
          <slot name="main-content">
