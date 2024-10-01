@@ -4,4 +4,5 @@ export interface IItem {
     itemPrice:number|string,
     itemCode:number|string|bigint,
     itemSubtotal:number|string,
+    stock:number
 }
