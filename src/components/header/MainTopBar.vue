@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-white shadow-[-11px_21px_13px_10px_#00000024]  h-dvh rounded-tr-3xl rounded-br-3xl">
+    <div class="bg-white shadow-[-11px_21px_13px_10px_#00000024]  h-dvh rounded-tr-sm rounded-br-3xl">
         <div class="flex items-center justify-center gap-2 py-2">
             <h1 class="text-xl text-black font-poppins">Neo Stock</h1>
         </div>

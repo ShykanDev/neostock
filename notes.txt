@@ -1,4 +1,4 @@
 *Create the top bar component
 *Create the main layout template for the site [X]
 *Create an array for a temp cart [X]
-Edit colors for table [//]
+*Edit colors for table [X]

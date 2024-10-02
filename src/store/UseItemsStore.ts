@@ -123,7 +123,7 @@ export const UseItemsStore = defineStore('UseItemStore',{
                     itemPrice: 20,
                     itemCode: 7273614798825,
                     itemSubtotal: 0,
-                    stock:12
+                    stock:0
                 },
             ],
             cart:[] as Array<IItem>
@@ -167,8 +167,8 @@ export const UseItemsStore = defineStore('UseItemStore',{
                 this.cart[index].stock ++;
             }
             console.log(this.cart[index]);
-            
-        }
+        },
+      
     }
 
 })

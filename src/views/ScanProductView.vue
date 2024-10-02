@@ -28,48 +28,92 @@
                      </tbody>
                     </TransitionGroup> -->
                     <TransitionGroup name="list" tag="ul" class="">
-                    <div class="flex">
-                         <li class="font-bold font-poppins text-lg min-w-[14.28%]">POS</li>
-                         <li class="font-bold font-poppins text-lg min-w-[14.28%]">PRODUCTO</li>
-                         <li class="font-bold font-poppins text-lg min-w-[14.28%]">CANTIDAD</li>
-                         <li class="font-bold font-poppins text-lg min-w-[14.28%]">EXISTENCIA</li>
-                         <li class="font-bold font-poppins text-lg min-w-[14.28%]">CÓDIGO</li>
-                         <li class="font-bold font-poppins text-lg min-w-[14.28%]">PRECIO UNITARIO</li>
-                         <li class="font-bold font-poppins text-lg min-w-[14.28%]">SUBTOTAL</li>
-                     </div>
-                     <div v-for="(item, index) in itemStore.getCartItems" :key="index" class="flex items-center w-full mb-2 rounded-lg justify-evenly font-poppins hover:bg-slate-200 hover:shadow-md">
-                        <div class="min-w-[14.28%] flex justify-center items-center">
-                            <p class="inline-block text-black shadow-sm font-bold bg-white rounded-full min-w-[25%]">{{ index +1 }}</p>
-                        </div>
-                       
-                        <p class="font-medium text-white bg-slate-500 rounded-md min-w-[14.28%]">{{ item.itemName }}</p>
-                        <!-- <p>{{ item.itemQuantity }}</p> -->
-                        <div class="flex items-center justify-center gap-1 min-w-[14.28%]">
-                                <input class="font-bold text-center rounded-md w-9 max-w-12" v-model.number="item.itemQuantity"  type="number" name="" id="" min="1" placeholder="1" readonly>
-                                <v-icon  @click="itemStore.editItemQuantity('increase', index)" class="cursor-pointer active:text-emerald-400 hover:text-emerald-700 hover:scale-110" name="bi-arrow-up-circle-fill" scale="1.5" color="#047857"/>
-                                <v-icon @click="itemStore.editItemQuantity('decrease', index)" class="cursor-pointer active:text-red-600" name="bi-arrow-down-circle-fill" scale="1.5" color="#black"/>
+                        <div class="flex py-2 mb-2 bg-white rounded-b-lg shadow-md">
+                            <div class="min-w-[7.6%] rounded-lg">
+                                <li class="inline-block px-1 text-lg font-bold font-poppins"
+                                    title="Posicion del producto en el carrito">Pos</li>
                             </div>
-                            <div class="min-w-[14.28%] flex justify-center items-center">
-                            <p class="inline-block text-black shadow-sm font-bold bg-white rounded-full min-w-[25%]">{{ item.stock }}</p>
+                            <div class="min-w-[15.35%] rounded-lg bg-white ">
+                                <li class="inline-block px-1 text-lg font-bold font-poppins" title="Nombre del producto">
+                                    Producto</li>
+                            </div>
+                            <div class="min-w-[15.35%] rounded-lg bg-white ">
+                                <li class="inline-block px-1 text-lg font-bold font-poppins"
+                                    title="Cantidad de veces que se venderá el producto">Cantidad</li>
+                            </div>
+                            <div class="min-w-[15.35%] rounded-lg bg-white ">
+                                <li class="inline-block px-1 text-lg font-bold font-poppins"
+                                    title="Cuantos hay en existencia o stock">Existencia</li>
+                            </div>
+                            <div class="min-w-[15.35%] rounded-lg bg-white ">
+                                <li class="inline-block px-1 text-lg font-bold font-poppins"
+                                    title="Código del producto en el sistema">Código</li>
+                            </div>
+                            <div class="min-w-[15.35%] rounded-lg bg-white ">
+                                <li class="inline-block px-1 text-lg font-bold font-poppins"
+                                    title="Precio por unidad del producto">Precio</li>
+                            </div>
+                            <div class="min-w-[15.35%] rounded-lg bg-white">
+                                <li class="inline-block px-1 text-lg font-bold font-poppins"
+                                    title="Valor del producto multiplicado por la cantidad">Subtotal</li>
+                            </div>
+
                         </div>
-                        <p class="inline-block text-base font-semibold  min-w-[14.28%]">{{ item.itemCode }}</p>
-                        <div class="min-w-[14.28%]">
-                            <p class="inline-block text-base  text-sky-900 font-bold bg-sky-200 rounded-md min-w-[25%]">${{ item.itemPrice }}</p>
+                        <div v-for="(item, index) in itemStore.getCartItems" :key="index"
+                         :class="{'bg-white': index % 2 === 0, 'bg-slate-50' : index % 2 !== 0}"   class="flex items-center w-full py-3 mb-2 rounded-lg shadow-sm justify-evenly font-poppins hover:bg-white hover:shadow-md">
+                            <div class="min-w-[7.6%] flex justify-center items-center">
+                                <p
+                                    class="inline-block text-black shadow-sm font-bold bg-white rounded-full min-w-[25%]">
+                                    {{ index +1 }}</p>
+                            </div>
+
+                            <p class="font-medium text-white bg-sky-950 rounded-md min-w-[15.35%]">{{ item.itemName }}
+                            </p>
+                            <!-- <p>{{ item.itemQuantity }}</p> -->
+                            <div class="flex items-center justify-center gap-1 min-w-[15.35%]">
+                                <input class="font-bold text-center rounded-md w-9 max-w-12"
+                                    v-model.number="item.itemQuantity" type="number" name="" id="" min="1"
+                                    placeholder="1" readonly>
+                                <v-icon @click="itemStore.editItemQuantity('increase', index)"
+                                    class="cursor-pointer active:text-emerald-400 hover:text-emerald-700 hover:scale-110"
+                                    name="bi-arrow-up-circle-fill" scale="1.5" color="#047857" />
+                                <v-icon @click="itemStore.editItemQuantity('decrease', index)"
+                                    class="cursor-pointer active:text-sky-400" name="bi-arrow-down-circle-fill"
+                                    scale="1.5" color="#0369a1" />
+                            </div>
+                            <div class="min-w-[15.35%] flex justify-center items-center">
+                                <p class="inline-block text-white bg-black shadow-sm font-bold  rounded-lg min-w-[25%]">
+                                    {{ item.stock }}</p>
+                            </div>
+                            <p class="inline-block text-base font-semibold  min-w-[15.35%]">{{ item.itemCode }}</p>
+                            <div class="min-w-[15.35%]">
+                                <p
+                                    class="inline-block text-base  text-sky-900 font-bold bg-sky-200 rounded-md min-w-[25%]">
+                                    ${{ item.itemPrice }}</p>
+                            </div>
+                            <div class="min-w-[15.35%]">
+                                <p
+                                    class="text-lg font-bold text-green-800 bg-green-100 rounded-md min-w-[60%] inline-block shadow-sm">
+                                    ${{ item.itemSubtotal}}</p>
+                            </div>
                         </div>
-                        <div class="min-w-[14.28%]">
-                            <p class="text-lg font-bold text-green-800 bg-green-100 rounded-md min-w-[60%] inline-block shadow-sm">${{ item.itemSubtotal}}</p>
-                        </div>
-                    </div>
                     </TransitionGroup>
                     <div class="">
                         <h1 class="text-3xl">Escanee el código de barras...</h1>
                         <!-- <h2 v-show="isSearchingCode" class="text-3xl">{{ isSearchingMessage }}</h2> -->
-                        <input @blur="autoFocus" @input="scanResult" v-model="barcodeValue" ref="barcodeInput" class="fixed bottom-0 left-0 z-40 text-3xl font-bold text-center bg-white rounded-md shadow-sm outline-none font-poppins" type="text">
-                        <h2 v-show="isError" class="mt-2 font-semibold text-sky-700 font-poppins">{{ errorMessage }}</h2>
-                        <LoaderDots v-show="isSearchingCode"/>
+                        
+                        <h2 v-show="isError" class="mt-2 font-semibold text-sky-700 font-poppins">{{ errorMessage }}
+                        </h2>
+                        <LoaderDots v-show="isSearchingCode" />
                     </div>
-                    <div class="absolute bottom-0 z-50 w-full bg-red-500 min-h-11">
-                        <p>TOTAL: {{ itemStore.getGrandTotal }} </p>
+                    <div class="fixed bottom-0 left-[17%] right-0 z-40 w-full shadow-lg bg-slate-300 min-h-11 flex items-center px-8">
+                        <div class="flex pl-[3%] items-center justify-evenly w-full">
+                            <input @blur="autoFocus" @input="scanResult" v-model="barcodeValue" ref="barcodeInput"
+                            class="text-2xl font-semibold text-center bg-white rounded-md shadow-sm outline-none font-poppins min-w-24 max-w-56"
+                            type="text">
+                            <p class="px-1 text-2xl font-semibold bg-white rounded-md text-sky-800">TOTAL:${{ itemStore.getGrandTotal }} </p>
+                            <button class="px-1 text-2xl font-semibold bg-white rounded-md text-sky-800" >Vender</button>
+                        </div>
                     </div>
                 </div>
             </template>
@@ -82,7 +126,7 @@ import LoaderDots from '@/animations/LoaderDots.vue';
 import { IItem } from '@/interfaces/IItem';
 import MainLayout from '@/layouts/MainLayout.vue';
 import { UseItemsStore } from '@/store/UseItemsStore';
-import { computed, nextTick, onMounted, Ref, ref } from 'vue';
+import { onMounted, onUnmounted, Ref, ref } from 'vue';
 
 // store Items
 const itemStore = UseItemsStore();
@@ -96,8 +140,6 @@ let isError = ref(false);
 let errorMessage = ref('');
 let timeoutId:Ref<null|number> = ref(null); // reference to the timeoutId
 
-// Value for store the result of the scan (if exists)  
-let sale:Ref<Array<IItem>> = ref([]);
 
 // function to execute when the user scans the barcode, it will search for the item and add it to the list, if it doesn't exist it will show an error
 const scanResult = ( ) => { 
@@ -116,7 +158,14 @@ const scanResult = ( ) => {
 
     
     const foundItems = UseItemsStore().getTotalItems.filter(e => e.itemCode == barcodeValue.value) 
+    if(foundItems[0].stock == 0){
+        alert(`No hay stock disponible para el producto ${foundItems[0].itemName} (${foundItems[0].itemCode})`);
+        barcodeValue.value = null;
+        isSearchingCode.value = false;
+        return;
+    }
     if (foundItems.length>0){
+        foundItems[0].stock--;
         itemStore.addItemToCart(foundItems[0])
         barcodeValue.value = null;
         isSearchingCode.value = false;
@@ -138,6 +187,12 @@ const scanResult = ( ) => {
 const barcodeInput = ref();
 onMounted( () =>{
     autoFocus();
+})
+
+onUnmounted(() => {
+    if(timeoutId.value){
+        clearTimeout(timeoutId.value)
+    }
 })
 
 </script>
