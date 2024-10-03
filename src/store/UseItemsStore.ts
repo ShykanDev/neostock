@@ -149,6 +149,7 @@ export const UseItemsStore = defineStore('UseItemStore',{
                 // if item already exist just increase the quantity
                 foundItem.itemQuantity += 1;
                 foundItem.itemSubtotal = foundItem.itemQuantity * Number(foundItem.itemPrice);
+                foundItem.stock = itemToAdd.stock;
             } else {
                 // If item does not exist, add to the cart
                 itemToAdd.itemSubtotal = itemToAdd.itemQuantity * Number(itemToAdd.itemPrice);
@@ -168,7 +169,11 @@ export const UseItemsStore = defineStore('UseItemStore',{
             }
             console.log(this.cart[index]);
         },
-      
+        editItemStock(itemCode:number, newStock:number):void{
+            const foundItem = this.totalItems.find( item => item.itemCode === itemCode);
+            if (foundItem) {
+                foundItem.stock = newStock;
+            }
     }
-
+    }
 })

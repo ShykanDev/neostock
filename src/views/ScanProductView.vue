@@ -2,7 +2,12 @@
     <div class="">
         <MainLayout>
             <template #main-content>
-                <div class="relative flex flex-col flex-1 overflow-auto h-dvh">
+                <div class="relative flex flex-col flex-1 w-full overflow-auto h-dvh">
+                    <div v-if="systemValues.getIsOutOfStockScanView" class="w-full bg-black">
+                        <div class="absolute top-0 bottom-0 left-0 right-0 flex items-center justify-center bg-black bg-opacity-25">
+                            <AddItemStock class="" :item-name="itemName" :item-code="itemCode"/>
+                        </div>
+                    </div>
                     <!-- <TransitionGroup name="list" tag="table" class="px-2 border-separate font-poppins border-spacing-y-2">
                      <thead>
                          <th>POS</th>
@@ -108,9 +113,16 @@
                     </div>
                     <div class="fixed bottom-0 left-[17%] right-0 z-40 w-full shadow-lg bg-slate-300 min-h-11 flex items-center px-8">
                         <div class="flex pl-[3%] items-center justify-evenly w-full">
-                            <input @blur="autoFocus" @input="scanResult" v-model="barcodeValue" ref="barcodeInput"
-                            class="text-2xl font-semibold text-center bg-white rounded-md shadow-sm outline-none font-poppins min-w-24 max-w-56"
-                            type="text">
+                            <div class="flex items-center justify-center gap-1">
+                                <input @blur="autoFocus" @input="scanResult" v-model="barcodeValue" ref="barcodeInput"
+                                class="text-2xl font-semibold text-center bg-white rounded-md shadow-sm outline-none font-poppins min-w-24 max-w-56"
+                                type="text" placeholder="Codigo de barras">
+                                <img src="../assets/barcode-scanner.svg" class="w-8" alt="">
+                            </div>
+                            <div>
+                                <input @click="focusReceivedInput" @input="focusReceivedInput" type="text" placeholder="Recibido $" class="text-2xl font-semibold bg-white rounded-md text-sky-800 active:bg-red-600" >
+
+                            </div>
                             <p class="px-1 text-2xl font-semibold bg-white rounded-md text-sky-800">TOTAL:${{ itemStore.getGrandTotal }} </p>
                             <button class="px-1 text-2xl font-semibold bg-white rounded-md text-sky-800" >Vender</button>
                         </div>
@@ -123,13 +135,17 @@
 
 <script lang="ts" setup>
 import LoaderDots from '@/animations/LoaderDots.vue';
+import AddItemStock from '@/components/ScanProductView/AddItemStock.vue';
 import { IItem } from '@/interfaces/IItem';
 import MainLayout from '@/layouts/MainLayout.vue';
 import { UseItemsStore } from '@/store/UseItemsStore';
+import { UseSystemValues } from '@/store/UseSystemValues';
 import { onMounted, onUnmounted, Ref, ref } from 'vue';
 
 // store Items
 const itemStore = UseItemsStore();
+// system values
+const systemValues = UseSystemValues();
 
 let barcodeValue = ref(); // reference to the barcode input element 
 let isSearchingCode = ref(false); // boolean that will be used to show/hide the loading animation (scanResult function)
@@ -140,6 +156,9 @@ let isError = ref(false);
 let errorMessage = ref('');
 let timeoutId:Ref<null|number> = ref(null); // reference to the timeoutId
 
+// values  (props) of <AddItemStock />
+let itemName = ref('');
+let itemCode = ref();
 
 // function to execute when the user scans the barcode, it will search for the item and add it to the list, if it doesn't exist it will show an error
 const scanResult = ( ) => { 
@@ -158,10 +177,14 @@ const scanResult = ( ) => {
 
     
     const foundItems = UseItemsStore().getTotalItems.filter(e => e.itemCode == barcodeValue.value) 
-    if(foundItems[0].stock == 0){
-        alert(`No hay stock disponible para el producto ${foundItems[0].itemName} (${foundItems[0].itemCode})`);
+    // check if the item is in stock 
+    if(foundItems.length>0 && foundItems[0].stock == 0){
+        // alert(`No hay stock disponible para el producto ${foundItems[0].itemName} (${foundItems[0].itemCode})`);
         barcodeValue.value = null;
         isSearchingCode.value = false;
+        systemValues.setIsOutOfStockScanView(true)
+        itemName.value = foundItems[0].itemName;
+        itemCode.value = foundItems[0].itemCode;
         return;
     }
     if (foundItems.length>0){
@@ -183,6 +206,13 @@ const scanResult = ( ) => {
     const autoFocus = () => {
     if (barcodeInput.value) barcodeInput.value.focus();
 };
+
+// function to stop focus and start typing in the ammount received input
+const focusReceivedInput = () => {
+    if (timeoutId.value){
+        clearTimeout(timeoutId.value)
+    }
+} 
 
 const barcodeInput = ref();
 onMounted( () =>{
