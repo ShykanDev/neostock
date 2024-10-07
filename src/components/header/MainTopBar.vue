@@ -5,27 +5,29 @@
         </div>
         <!-- Section of all views -->
         <article class="flex flex-col flex-wrap items-start gap-3 p-2 font-semibold select-none font-poppins">
-            <div class="flex items-center w-full gap-1 transition-all duration-150 ease-out hover:cursor-pointer hover:bg-slate-400 hover:text-white hover:rounded-md">
-                <v-icon  name="bi-upc-scan" scale="2" color="black"/>   
+            <RouterLink :to="{name: 'scan'}" class="flex items-center w-full gap-1 p-1 text-white transition-all duration-150 ease-out rounded-md bg-slate-900 hover:cursor-pointer">
+                <v-icon  name="bi-upc-scan" scale="2" color="white"/>   
                 <p>Escanear Producto</p>
-            </div>
-            <div class="flex items-center w-full gap-1 transition-all duration-75 ease-out hover:cursor-pointer hover:bg-slate-400 hover:text-white hover:rounded-md ">
+            </RouterLink>
+            <RouterLink :to="{name: 'home'}" class="flex items-center w-full gap-1 p-1 transition-all duration-150 ease-out rounded-md text-slate-800 bg-sky-100 hover:cursor-pointer">
                 <v-icon name="ri-home-fill" scale="2" color="black"/>
                 <p>Inicio</p>
-            </div>
-            <div class="flex items-center w-full gap-1 transition-all duration-75 ease-out hover:cursor-pointer hover:bg-slate-400 hover:text-white hover:rounded-md ">
-                <v-icon name="md-addbox" scale="2" color="black"/>
+            </RouterLink>
+            <RouterLink :to="{name: 'addProduct'}" class="flex items-center w-full gap-1 p-1 transition-all duration-150 ease-out rounded-md text-slate-800 bg-sky-100 hover:cursor-pointer">
+                <v-icon name="ri-home-fill" scale="2" color="black"/>
                 <p>Agregar Nuevo Producto</p>
-            </div>
-            <div class="flex items-center w-full gap-1 transition-all duration-75 ease-out hover:cursor-pointer hover:bg-slate-400 hover:text-white hover:rounded-md ">
-                <v-icon name="md-pointofsale" scale="2" color="black"/>
+            </RouterLink>
+            <RouterLink :to="{name: 'sales'}" class="flex items-center w-full gap-1 p-1 transition-all duration-150 ease-out rounded-md text-slate-800 bg-sky-100 hover:cursor-pointer">
+                <v-icon name="ri-home-fill" scale="2" color="black"/>
                 <p>Ventas</p>
-            </div>
+            </RouterLink>
         </article>
     </div>
 </template>
 
 <script lang="ts" setup>
+import { RouterLink } from 'vue-router';
+
 
 </script>
 

@@ -6,26 +6,26 @@ export const UseItemsStore = defineStore('UseItemStore',{
         return{
             totalItems : [
                 {
-                    itemName: "Delineador de Ojos",
+                    itemName: "Tang de Limón",
                     itemQuantity: 1,
                     itemPrice: 50, // precio en números cerrados
-                    itemCode: 2497596474051,
+                    itemCode: 7622210573216,
                     itemSubtotal: 0,
                     stock:32 // subtotal inicialmente en 0
                 },
                 {
-                    itemName: "Labial Mate",
+                    itemName: "Gel Ego",
                     itemQuantity: 1,
                     itemPrice: 40,
-                    itemCode: 5424403063529,
+                    itemCode: 7506306247482,
                     itemSubtotal: 0,
-                    stock:25
+                    stock:0
                 },
                 {
-                    itemName: "Sombra de Ojos",
+                    itemName: "Tenis Refil",
                     itemQuantity: 1,
                     itemPrice: 35,
-                    itemCode: 64027835425480,
+                    itemCode: 8635007270070349,
                     itemSubtotal: 0,
                     stock:15
                 },
@@ -38,50 +38,50 @@ export const UseItemsStore = defineStore('UseItemStore',{
                     stock:16
                 },
                 {
-                    itemName: "Corrector Líquido",
+                    itemName: "Paracetamol 650mg tableta",
                     itemQuantity: 1,
                     itemPrice: 55,
-                    itemCode: 65472771064808,
+                    itemCode: 7501644753060,
                     itemSubtotal: 0,
                     stock:18
                 },
                 {
-                    itemName: "Polvo Traslúcido",
+                    itemName: "Caja de carton",
                     itemQuantity: 1,
                     itemPrice: 45,
-                    itemCode: 993752155038548,
+                    itemCode: "BZMS47464",
                     itemSubtotal: 0,
                     stock:16
                 },
                 {
-                    itemName: "Iluminador",
+                    itemName: "Toallitas Humedas KleenBebé",
                     itemQuantity: 1,
                     itemPrice: 70,
-                    itemCode: 161306875897337,
+                    itemCode: 7501943471900,
                     itemSubtotal: 0,
                     stock:18
                 },
                 {
-                    itemName: "Base de Maquillaje",
+                    itemName: "Amoxicilina",
                     itemQuantity: 1,
                     itemPrice: 30,
-                    itemCode: 895268144913187,
+                    itemCode: 7501349021570,
                     itemSubtotal: 0,
                     stock:13
                 },
                 {
-                    itemName: "Pintura para Cejas",
+                    itemName: "Bicoestol Eucalipto",
                     itemQuantity: 1,
                     itemPrice: 25,
-                    itemCode: 83128574834953373n,
+                    itemCode: 714706910487,
                     itemSubtotal: 0,
                     stock:56
                 },
                 {
-                    itemName: "Esponja de Maquillaje",
+                    itemName: "Paracetamol 500mg tableta",
                     itemQuantity: 1,
                     itemPrice: 15,
-                    itemCode: 16891867255932890n,
+                    itemCode: 7501361682094,
                     itemSubtotal: 0,
                     stock:16
                 },
@@ -102,26 +102,26 @@ export const UseItemsStore = defineStore('UseItemStore',{
                     stock:12
                 },
                 {
-                    itemName: "Brocha de Maquillaje",
+                    itemName: "Disco Estado Solido",
                     itemQuantity: 1,
                     itemPrice: 25,
-                    itemCode: 12333477420734,
+                    itemCode: "IYEX07108",
                     itemSubtotal: 0,
                     stock:18
                 },
                 {
-                    itemName: "Paleta de Sombras",
+                    itemName: "Baygon Total",
                     itemQuantity: 1,
                     itemPrice: 80,
-                    itemCode: 59298292648216,
+                    itemCode: 7503036165215,
                     itemSubtotal: 0,
                     stock:32
                 },
                 {
-                    itemName: "Desmaquillante",
+                    itemName: "Alcohol Etílico 250ml",
                     itemQuantity: 1 ,
                     itemPrice: 20,
-                    itemCode: 7273614798825,
+                    itemCode: 7501020607086,
                     itemSubtotal: 0,
                     stock:0
                 },

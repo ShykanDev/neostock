@@ -2,7 +2,7 @@
     <div class="">
         <MainLayout>
             <template #main-content>
-                <h1>This is the Home View</h1>
+                <h1>This is the Sales View</h1>
             </template>
         </MainLayout>
     </div>
@@ -10,6 +10,8 @@
 
 <script lang="ts" setup>
 import MainLayout from '@/layouts/MainLayout.vue';
+
+
 </script>
 
 <style scoped>
