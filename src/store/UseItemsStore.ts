@@ -157,19 +157,35 @@ export const UseItemsStore = defineStore('UseItemStore',{
             }
         },
         editItemQuantity(param:string, index:number):void{
+            // if param is 'increase' and stock is not zero
             if(param === 'increase' && this.cart[index].stock > 0) {
                 this.cart[index].itemQuantity ++;
                 this.cart[index].itemSubtotal = this.cart[index].itemQuantity * Number(this.cart[index].itemPrice);
                 this.cart[index].stock --;
-            } else if(param === 'decrease') {
+            }
+            if(param === 'decrease' && this.cart[index].stock == 0){
+                this.cart[index].itemQuantity --;
+                this.cart[index].stock ++;
+                this.cart[index].itemSubtotal = this.cart[index].itemQuantity * Number(this.cart[index].itemPrice);
+            }
+            else if(param === 'decrease') { // else if param is 'decrease' then decrease the quantity
                 if (this.cart[index].itemQuantity ===1) return;
                 this.cart[index].itemQuantity --;
                 this.cart[index].itemSubtotal = this.cart[index].itemQuantity * Number(this.cart[index].itemPrice);
                 this.cart[index].stock ++;
             }
-            console.log(this.cart[index]);
         },
-        editItemStock(itemCode:number, newStock:number):void{
+        editItemCartStock(itemCodeParam:string|number|bigint, newStock:number){
+            const itemCartFound = this.cart.find((e) => e.itemCode === itemCodeParam);
+           if(itemCartFound){
+            const indexItemCart = this.cart.indexOf(itemCartFound);
+            this.cart[indexItemCart].stock = newStock;
+           }
+           else{
+            alert('There was an error while trying to add stock to the item')
+           }
+        },
+        editItemStock(itemCode:number, newStock:number):void{ //Not safe for use in production
             const foundItem = this.totalItems.find( item => item.itemCode === itemCode);
             if (foundItem) {
                 foundItem.stock = newStock;

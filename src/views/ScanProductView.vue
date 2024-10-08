@@ -62,7 +62,6 @@
                                 <li class="inline-block px-1 text-lg font-bold font-poppins"
                                     title="Valor del producto multiplicado por la cantidad">Subtotal</li>
                             </div>
-
                         </div>
                         <div v-for="(item, index) in itemStore.getCartItems" :key="index"
                          :class="{'bg-white': index % 2 === 0, 'bg-slate-50' : index % 2 !== 0}"   class="flex items-center w-full py-3 mb-2 rounded-lg shadow-sm justify-evenly font-poppins hover:bg-white hover:shadow-md">
@@ -76,7 +75,7 @@
                             </p>
                             <!-- <p>{{ item.itemQuantity }}</p> -->
                             <div class="flex items-center justify-center gap-1 min-w-[15.35%]">
-                                <input class="font-bold text-center rounded-md w-9 max-w-12"
+                                <input class="font-bold text-center text-white bg-black rounded-md w-9 max-w-12"
                                     v-model.number="item.itemQuantity" type="number" name="" id="" min="1"
                                     placeholder="1" readonly>
                                 <v-icon @click="itemStore.editItemQuantity('increase', index)"
@@ -87,7 +86,7 @@
                                     scale="1.5" color="#0369a1" />
                             </div>
                             <div class="min-w-[15.35%] flex justify-center items-center">
-                                <p class="inline-block text-white bg-black shadow-sm font-bold  rounded-lg min-w-[25%]">
+                                <p :class="{'text-sky-800 bg-white shadow-md border-sky-800': item.stock > 5, 'text-red-600 bg-white shadow-md border-red-500': item.stock <= 5}" class="inline-block  border  shadow-sm font-bold  rounded-lg min-w-[25%]">
                                     {{ item.stock }}</p>
                             </div>
                             <p class="inline-block text-base font-semibold  min-w-[15.35%]">{{ item.itemCode }}</p>
@@ -121,7 +120,6 @@
                             </div>
                             <div>
                                 <input @click="focusReceivedInput" @input="focusReceivedInput" type="text" placeholder="Recibido $" class="text-2xl font-semibold bg-white rounded-md text-sky-800 active:bg-red-600" >
-
                             </div>
                             <p class="px-1 text-2xl font-semibold bg-white rounded-md text-sky-800">TOTAL:${{ itemStore.getGrandTotal }} </p>
                             <button class="px-1 text-2xl font-semibold bg-white rounded-md text-sky-800" >Vender</button>
@@ -176,10 +174,9 @@ const scanResult = ( ) => {
     errorMessage.value = '';
 
     
-    const foundItems = UseItemsStore().getTotalItems.filter(e => e.itemCode == barcodeValue.value) 
-    // check if the item is in stock 
+    const foundItems = UseItemsStore().getTotalItems.filter(e => e.itemCode == barcodeValue.value);
+    // if the item is out of stock
     if(foundItems.length>0 && foundItems[0].stock == 0){
-        // alert(`No hay stock disponible para el producto ${foundItems[0].itemName} (${foundItems[0].itemCode})`);
         barcodeValue.value = null;
         isSearchingCode.value = false;
         systemValues.setIsOutOfStockScanView(true)
@@ -187,13 +184,28 @@ const scanResult = ( ) => {
         itemCode.value = foundItems[0].itemCode;
         return;
     }
-    if (foundItems.length>0){
-        foundItems[0].stock--;
-        itemStore.addItemToCart(foundItems[0])
-        barcodeValue.value = null;
-        isSearchingCode.value = false;
-        isSearchingMessage.value;
-    } else{
+    //If item was found on the system, now check if exist in the cart, if so then decrease the stock of the item inside the cart
+    if (foundItems.length > 0) { // if the item was found on the system
+        const foundItemCart = itemStore.getCartItems.filter(e => e.itemCode == foundItems[0].itemCode);
+        if(foundItemCart.length >0 && foundItemCart[0].stock ===0 ){
+            barcodeValue.value = null;
+            itemName.value = foundItemCart[0].itemName;
+            itemCode.value = foundItemCart[0].itemCode;
+            isSearchingCode.value = false;
+            systemValues.setIsOutOfStockScanView(true);
+            return;
+        } 
+        if (foundItemCart.length > 0) { // if the item was found in the cart reduce it stock by 1
+            foundItemCart[0].stock--;
+            foundItemCart[0].itemQuantity++;
+            barcodeValue.value = null;
+            isSearchingCode.value = false;            
+    } else if (foundItemCart.length == 0) { // if the item was not found in the cart, adding it as new
+            itemStore.addItemToCart(foundItems[0])
+            barcodeValue.value = null;
+            isSearchingCode.value = false;
+    }
+    else{
         timeoutId.value = setTimeout(() => {
             isSearchingCode.value = false;
             isError.value = true;
@@ -201,6 +213,7 @@ const scanResult = ( ) => {
         }, 2000)
     }
     
+}
 }
  //function to focus on the barcode input element
     const autoFocus = () => {
