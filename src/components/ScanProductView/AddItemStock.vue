@@ -43,7 +43,7 @@ const editStock = (operation: string) => {
     }
 }
 
-const editItemStock = (itemCode: number) => {
+const editItemStock = (itemCode: string) => {
         itemsStore.editItemCartStock(itemCode, stockToAdd.value)
         systemValues.setIsOutOfStockScanView(false);
 }
@@ -54,8 +54,8 @@ const props = defineProps({
         required:true
     },
     itemCode:{
-        type:Number||String,
-        default:123456,
+        type:String,
+        default:"123456",
         required:true
     }
 })

@@ -9,7 +9,7 @@ export const UseItemsStore = defineStore('UseItemStore',{
                     itemName: "Tang de Limón",
                     itemQuantity: 1,
                     itemPrice: 50, // precio en números cerrados
-                    itemCode: 7622210573216,
+                    itemCode: "7622210573216",
                     itemSubtotal: 0,
                     stock:32 // subtotal inicialmente en 0
                 },
@@ -17,7 +17,7 @@ export const UseItemsStore = defineStore('UseItemStore',{
                     itemName: "Gel Ego",
                     itemQuantity: 1,
                     itemPrice: 40,
-                    itemCode: 7506306247482,
+                    itemCode: "7506306247482",
                     itemSubtotal: 0,
                     stock:0
                 },
@@ -25,7 +25,7 @@ export const UseItemsStore = defineStore('UseItemStore',{
                     itemName: "Tenis Refil",
                     itemQuantity: 1,
                     itemPrice: 35,
-                    itemCode: 8635007270070349,
+                    itemCode: "7508635007270070349",
                     itemSubtotal: 0,
                     stock:15
                 },
@@ -33,7 +33,7 @@ export const UseItemsStore = defineStore('UseItemStore',{
                     itemName: "Rubor en Polvo",
                     itemQuantity: 1,
                     itemPrice: 60,
-                    itemCode: 67630471960817727n,
+                    itemCode: "67630471960817727",
                     itemSubtotal: 0,
                     stock:16
                 },
@@ -41,7 +41,7 @@ export const UseItemsStore = defineStore('UseItemStore',{
                     itemName: "Paracetamol 650mg tableta",
                     itemQuantity: 1,
                     itemPrice: 55,
-                    itemCode: 7501644753060,
+                    itemCode: "7501644753060",
                     itemSubtotal: 0,
                     stock:18
                 },
@@ -57,7 +57,7 @@ export const UseItemsStore = defineStore('UseItemStore',{
                     itemName: "Toallitas Humedas KleenBebé",
                     itemQuantity: 1,
                     itemPrice: 70,
-                    itemCode: 7501943471900,
+                    itemCode: "7501943471900",
                     itemSubtotal: 0,
                     stock:18
                 },
@@ -65,7 +65,7 @@ export const UseItemsStore = defineStore('UseItemStore',{
                     itemName: "Amoxicilina",
                     itemQuantity: 1,
                     itemPrice: 30,
-                    itemCode: 7501349021570,
+                    itemCode: "7501349021570",
                     itemSubtotal: 0,
                     stock:13
                 },
@@ -73,7 +73,7 @@ export const UseItemsStore = defineStore('UseItemStore',{
                     itemName: "Bicoestol Eucalipto",
                     itemQuantity: 1,
                     itemPrice: 25,
-                    itemCode: 714706910487,
+                    itemCode: "714706910487",
                     itemSubtotal: 0,
                     stock:56
                 },
@@ -81,7 +81,7 @@ export const UseItemsStore = defineStore('UseItemStore',{
                     itemName: "Paracetamol 500mg tableta",
                     itemQuantity: 1,
                     itemPrice: 15,
-                    itemCode: 7501361682094,
+                    itemCode: "7501361682094",
                     itemSubtotal: 0,
                     stock:16
                 },
@@ -89,7 +89,7 @@ export const UseItemsStore = defineStore('UseItemStore',{
                     itemName: "Mascara de Pestañas",
                     itemQuantity: 1,
                     itemPrice: 50,
-                    itemCode: 225325471358502,
+                    itemCode: "225325471358502",
                     itemSubtotal: 0,
                     stock:35
                 },
@@ -97,7 +97,7 @@ export const UseItemsStore = defineStore('UseItemStore',{
                     itemName: "Lápiz de Labios",
                     itemQuantity: 1,
                     itemPrice: 45,
-                    itemCode: 1991024575390,
+                    itemCode: "1991024575390",
                     itemSubtotal: 0,
                     stock:12
                 },
@@ -113,15 +113,15 @@ export const UseItemsStore = defineStore('UseItemStore',{
                     itemName: "Baygon Total",
                     itemQuantity: 1,
                     itemPrice: 80,
-                    itemCode: 7503036165215,
+                    itemCode: "7503036165215",
                     itemSubtotal: 0,
-                    stock:32
+                    stock:0
                 },
                 {
                     itemName: "Alcohol Etílico 250ml",
                     itemQuantity: 1 ,
                     itemPrice: 20,
-                    itemCode: 7501020607086,
+                    itemCode: "7501020607086",
                     itemSubtotal: 0,
                     stock:0
                 },
@@ -130,66 +130,99 @@ export const UseItemsStore = defineStore('UseItemStore',{
         }
     },
     getters:{
-        getTotalItems():Array<IItem>{
+        // Returning the system items Array
+        getTotalItems():IItem[]{
             return this.totalItems;
         },
-        getCartItems():Array<IItem>{
-            return this.cart;
+        // Returning the cart Array
+        getCartItems():IItem[]{
+           return this.cart;
         },
-        getGrandTotal():any{
-         let allPrices = [];
-            allPrices = this.cart.map( e => e.itemSubtotal)
-            return allPrices.reduce( ( a,b) => Number(a)+Number(b),0);
+        // Returning the sum of each product subtotal of the cart
+        getTotalCartPrice():number{
+            const totalCartSubtotal = this.cart.map(e => e.itemSubtotal).reduce((a,b) => a+b,0);
+            return totalCartSubtotal
         }
     },
     actions:{
+        // function to add new item to Cart
         addItemToCart(itemToAdd:IItem):void{
-            const foundItem = this.cart.find( item => item.itemCode === itemToAdd.itemCode); 
-            if (foundItem) {
-                // if item already exist just increase the quantity
-                foundItem.itemQuantity += 1;
-                foundItem.itemSubtotal = foundItem.itemQuantity * Number(foundItem.itemPrice);
-                foundItem.stock = itemToAdd.stock;
-            } else {
-                // If item does not exist, add to the cart
-                itemToAdd.itemSubtotal = itemToAdd.itemQuantity * Number(itemToAdd.itemPrice);
-                this.cart.push({...itemToAdd});
+            // making a copy of the $itemToAdd to avoid modify original stock
+            const copyItemToAdd = {...itemToAdd};
+            // Verify if $itemToAdd already exist on cart
+            const itemFoundOnCart = this.cart.find((e) => e.itemCode === copyItemToAdd.itemCode);
+            // If item does not exist add it to the cart
+            if(!itemFoundOnCart){
+                copyItemToAdd.itemSubtotal = copyItemToAdd.itemPrice * copyItemToAdd.itemQuantity;
+                copyItemToAdd.stock--;
+                this.cart.push(copyItemToAdd);
+                return;
             }
+            // If item already exist on the cart just update its values of subtotal, stock and quantity
+            if(itemFoundOnCart){
+                itemFoundOnCart.itemQuantity ++;
+                itemFoundOnCart.stock --;
+                itemFoundOnCart.itemSubtotal = itemFoundOnCart.itemPrice * itemFoundOnCart.itemQuantity;
+                return;
+            } 
+             // If none of the conditions above were met, log an error
+            console.log('Unexpected condition: item could not be found or added to the cart.');
         },
+        // function to edit the item cart quantity based on it stock and the quantity
         editItemQuantity(param:string, index:number):void{
-            // if param is 'increase' and stock is not zero
-            if(param === 'increase' && this.cart[index].stock > 0) {
-                this.cart[index].itemQuantity ++;
-                this.cart[index].itemSubtotal = this.cart[index].itemQuantity * Number(this.cart[index].itemPrice);
-                this.cart[index].stock --;
-            }
-            if(param === 'decrease' && this.cart[index].stock == 0){
-                this.cart[index].itemQuantity --;
-                this.cart[index].stock ++;
-                this.cart[index].itemSubtotal = this.cart[index].itemQuantity * Number(this.cart[index].itemPrice);
-            }
-            else if(param === 'decrease') { // else if param is 'decrease' then decrease the quantity
-                if (this.cart[index].itemQuantity ===1) return;
-                this.cart[index].itemQuantity --;
-                this.cart[index].itemSubtotal = this.cart[index].itemQuantity * Number(this.cart[index].itemPrice);
-                this.cart[index].stock ++;
+            const item = this.cart[index];
+            switch(param){
+                case 'increase' :
+                    if(item.stock>0){
+                        item.itemQuantity++;
+                        item.stock--;
+                        item.itemSubtotal = item.itemPrice * item.itemQuantity;
+                    } else {
+                        console.log('There is not enough stock to increase the quantity');
+                        return;
+                    }
+                break;
+                case 'decrease' :
+                 if(item.itemQuantity>1){
+                    item.itemQuantity--;
+                    item.stock++;
+                    item.itemSubtotal = item.itemPrice * item.itemQuantity;
+                 }  else {
+                    console.log('Can not reduce the quantity to less than 1');                    
+                    return;
+                 } 
+                 break
+            default :
+            console.log('Param not valid, you must enter "increase" or "decrease" as param' );
             }
         },
-        editItemCartStock(itemCodeParam:string|number|bigint, newStock:number){
-            const itemCartFound = this.cart.find((e) => e.itemCode === itemCodeParam);
-           if(itemCartFound){
-            const indexItemCart = this.cart.indexOf(itemCartFound);
-            this.cart[indexItemCart].stock = newStock;
-           }
-           else{
-            alert('There was an error while trying to add stock to the item')
-           }
-        },
-        editItemStock(itemCode:number, newStock:number):void{ //Not safe for use in production
-            const foundItem = this.totalItems.find( item => item.itemCode === itemCode);
-            if (foundItem) {
-                foundItem.stock = newStock;
+        // function to edit the stock of an specific item of the cart
+        editItemCartStock(itemCode:string, newStock:number):void{
+            // Value that will store the item if its found in the system
+            const itemInSystem = this.totalItems.find(e => e.itemCode.toUpperCase() === itemCode.toUpperCase());
+            // Value that will store the item if its found in the cart
+            const itemInCart = this.cart.find(e => e.itemCode.toUpperCase() === itemCode.toUpperCase());
+            // If item is in cart then update its values
+            if (itemInCart){
+                itemInCart.stock = newStock;
+                itemInCart.itemSubtotal = itemInCart.itemPrice * itemInCart.itemQuantity;
+                return;
+            } 
+            // If item is not in the cart but exists in the system then 
+            if(itemInSystem && !itemInCart ){
+                itemInSystem.stock = newStock;
+            // Now push the new item in system to the cart (a shallow copy to prevent to link the original item to be modified)
+                const copyItemInSystem = {...itemInSystem};
+                copyItemInSystem.stock = 0;
+                copyItemInSystem.itemQuantity = 1;
+                copyItemInSystem.itemSubtotal = copyItemInSystem.itemPrice * copyItemInSystem.itemQuantity;
+                this.cart.push(copyItemInSystem);
+                return;
             }
-    }
+            console.log("There was an error while trying to add stock");   
+        },
+        deleteItemCart(indexToDelete:number):void{
+            this.cart.splice(indexToDelete,1)
+        },
     }
 })

@@ -4,8 +4,8 @@ import './registerServiceWorker'
 import router from './router'
 import './styles.css'
 import { OhVueIcon, addIcons } from "oh-vue-icons";
-import { FaFlag, RiZhihuFill, BiUpcScan,MdAddbox,RiHomeFill,MdPointofsale, BiArrowUpCircleFill, BiArrowDownCircleFill, BiCartX, MdWarningRound   } from "oh-vue-icons/icons";
-addIcons(FaFlag, RiZhihuFill, BiUpcScan,MdAddbox,RiHomeFill,MdPointofsale, BiArrowUpCircleFill, BiArrowDownCircleFill, BiCartX, MdWarningRound  );
+import { FaFlag, RiZhihuFill, BiUpcScan,MdAddbox,RiHomeFill,MdPointofsale, BiArrowUpCircleFill, BiArrowDownCircleFill, BiCartX, MdWarningRound, RiDeleteBack2Fill, FaTrash   } from "oh-vue-icons/icons";
+addIcons(FaFlag, RiZhihuFill, BiUpcScan,MdAddbox,RiHomeFill,MdPointofsale, BiArrowUpCircleFill, BiArrowDownCircleFill, BiCartX, MdWarningRound, RiDeleteBack2Fill, FaTrash  );
 import { createPinia } from 'pinia'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 const pinia = createPinia()

@@ -8,30 +8,6 @@
                             <AddItemStock class="" :item-name="itemName" :item-code="itemCode"/>
                         </div>
                     </div>
-                    <!-- <TransitionGroup name="list" tag="table" class="px-2 border-separate font-poppins border-spacing-y-2">
-                     <thead>
-                         <th>POS</th>
-                         <th>PRODUCTO</th>
-                         <th>CANTIDAD</th>
-                         <th>CÓDIGO</th>
-                         <th>PRECIO UNITARIO</th>
-                         <th>SUBTOTAL</th>
-                     </thead>
-                     <tbody>
-                         <tr  v-for="(item, index) in itemStore.getCartItems" :key="index" class="mb-2" >
-                            <td class="inline-block font-medium text-white bg-black rounded-full min-w-6">{{ index +1 }}</td>
-                            <td class="font-medium text-white bg-black rounded-md">{{ item.itemName }}</td>
-                            <div class="flex items-center justify-center gap-1">
-                                <input class="text-center rounded-md w-9 max-w-12" v-model.number="item.itemQuantity"  type="number" name="" id="" min="1" placeholder="1" readonly>
-                                <v-icon  @click="itemStore.editItemQuantity('increase', index)" class="cursor-pointer active:text-emerald-400" name="bi-arrow-up-circle-fill" scale="1.5" color="black"/>
-                                <v-icon @click="itemStore.editItemQuantity('decrease', index)" class="cursor-pointer active:text-red-600" name="bi-arrow-down-circle-fill" scale="1.5" color="black"/>
-                            </div>
-                            <td>{{ item.itemCode }}</td>
-                            <td class="inline-block text-base font-semibold text-white bg-black rounded-md min-w-11">${{ item.itemPrice }}</td>
-                           <td class="text-lg font-bold text-white bg-black rounded-md">${{ item.itemSubtotal}}</td>
-                         </tr>
-                     </tbody>
-                    </TransitionGroup> -->
                     <TransitionGroup name="list" tag="ul" class="">
                         <div class="flex py-2 mb-2 bg-white rounded-b-lg shadow-md">
                             <div class="min-w-[7.6%] rounded-lg">
@@ -63,17 +39,23 @@
                                     title="Valor del producto multiplicado por la cantidad">Subtotal</li>
                             </div>
                         </div>
-                        <div v-for="(item, index) in itemStore.getCartItems" :key="index"
-                         :class="{'bg-white': index % 2 === 0, 'bg-slate-50' : index % 2 !== 0}"   class="flex items-center w-full py-3 mb-2 rounded-lg shadow-sm justify-evenly font-poppins hover:bg-white hover:shadow-md">
+                        <div v-for="(item, index) in itemStore.getCartItems" :key="item.itemCode"
+                         :class="{'bg-white': index % 2 === 0, 'bg-slate-50' : index % 2 !== 0}"   class="flex items-center w-full py-3 mb-2 rounded-lg shadow-sm justify-evenly font-poppins hover:bg-gray-100 hover:shadow-md">
                             <div class="min-w-[7.6%] flex justify-center items-center">
                                 <p
                                     class="inline-block text-black shadow-sm font-bold bg-white rounded-full min-w-[25%]">
-                                    {{ index +1 }}</p>
+                                    {{ index +1 }}
+                                </p>
+                                    <v-icon 
+                                    v-if="isDeletionActive"
+
+                                    @click="itemStore.deleteItemCart(index)"
+                                    class="cursor-pointer active:text-red-400 hover:text-red-500 hover:scale-110"
+                                    name="fa-trash" scale="1.5" color="#b91c1c" />
                             </div>
 
                             <p class="font-medium text-white bg-sky-950 rounded-md min-w-[15.35%]">{{ item.itemName }}
                             </p>
-                            <!-- <p>{{ item.itemQuantity }}</p> -->
                             <div class="flex items-center justify-center gap-1 min-w-[15.35%]">
                                 <input class="font-bold text-center text-white bg-black rounded-md w-9 max-w-12"
                                     v-model.number="item.itemQuantity" type="number" name="" id="" min="1"
@@ -102,27 +84,42 @@
                             </div>
                         </div>
                     </TransitionGroup>
-                    <div class="">
-                        <h1 class="text-3xl">Escanee el código de barras...</h1>
+                    <div v-if="itemStore.getCartItems.length === 0" class="">
+                        <h1 class="text-3xl font-medium font-poppins">Escanee o ingrese manualmente el código de barras</h1>
                         <!-- <h2 v-show="isSearchingCode" class="text-3xl">{{ isSearchingMessage }}</h2> -->
-                        
+                         <div class="flex justify-center">
+                             <img src="../assets/Qr Code.gif" class="w-20" alt="">
+                         </div>
                         <h2 v-show="isError" class="mt-2 font-semibold text-sky-700 font-poppins">{{ errorMessage }}
                         </h2>
-                        <LoaderDots v-show="isSearchingCode" />
+                        <LoaderDots v-show="isSearchingCode && barcodeValue" />
                     </div>
-                    <div class="fixed bottom-0 left-[17%] right-0 z-40 w-full shadow-lg bg-slate-300 min-h-11 flex items-center px-8">
-                        <div class="flex pl-[3%] items-center justify-evenly w-full">
-                            <div class="flex items-center justify-center gap-1">
+                    <div class="absolute bottom-0 flex items-center justify-around w-full px-2 bg-white rounded-tr-md rounded-tl-md min-h-11 ">
+                        <div class="flex items-center justify-center gap-1">
                                 <input @blur="autoFocus" @input="scanResult" v-model="barcodeValue" ref="barcodeInput"
-                                class="text-2xl font-semibold text-center bg-white rounded-md shadow-sm outline-none font-poppins min-w-24 max-w-56"
-                                type="text" placeholder="Codigo de barras">
-                                <img src="../assets/barcode-scanner.svg" class="w-8" alt="">
-                            </div>
-                            <div>
-                                <input @click="focusReceivedInput" @input="focusReceivedInput" type="text" placeholder="Recibido $" class="text-2xl font-semibold bg-white rounded-md text-sky-800 active:bg-red-600" >
-                            </div>
-                            <p class="px-1 text-2xl font-semibold bg-white rounded-md text-sky-800">TOTAL:${{ itemStore.getGrandTotal }} </p>
-                            <button class="px-1 text-2xl font-semibold bg-white rounded-md text-sky-800" >Vender</button>
+                                class="text-xl font-semibold text-center rounded-md shadow-sm outline-none placeholder:text-slate-100 text-white bg-slate-900 font-poppins min-w-28 max-w-[350px]"
+                                type="text" placeholder="Escanear o ingresar">
+                                <!-- <img src="../assets/barcode-scanner.svg" class="w-8" alt=""> -->
+                                <v-icon  
+                                    @click="clearBarcode"
+                                    class="cursor-pointer active:text-red-900 hover:text-red-500 hover:scale-110"
+                                    name="ri-delete-back-2-fill" scale="1.5" color="#c41306" />
+                        </div>
+                        <div>
+                            <div :class="{'bg-red-900 hover:bg-red-600' : !isDeletionActive, 'bg-sky-700 hover:bg-sky-600': isDeletionActive}" class="px-4 py-2 font-medium text-white transition duration-150 ease-in-out rounded-lg cursor-pointer font-poppins"
+                            @click="toggleIsDelectionActive"
+                            >
+                            <p v-if="!isDeletionActive">Eliminar producto</p>
+                            <p v-if="isDeletionActive">Desactivar eliminación</p>
+                        </div>
+                        </div>
+                        <div>
+                            <button class="px-4 py-2 text-white transition duration-150 ease-in-out rounded-lg bg-emerald-600 hover:bg-emerald-500 font-poppins"
+                            >Vender</button>
+                        </div>
+                        <div>
+                            <h3 class="p-1 px-2 text-xl font-semibold text-white rounded-md font-poppins bg-sky-800">Total: ${{ itemStore.getTotalCartPrice }}
+                            </h3>
                         </div>
                     </div>
                 </div>
@@ -134,15 +131,14 @@
 <script lang="ts" setup>
 import LoaderDots from '@/animations/LoaderDots.vue';
 import AddItemStock from '@/components/ScanProductView/AddItemStock.vue';
-import { IItem } from '@/interfaces/IItem';
 import MainLayout from '@/layouts/MainLayout.vue';
 import { UseItemsStore } from '@/store/UseItemsStore';
 import { UseSystemValues } from '@/store/UseSystemValues';
 import { onMounted, onUnmounted, Ref, ref } from 'vue';
 
-// store Items
+// items Store
 const itemStore = UseItemsStore();
-// system values
+// system Store
 const systemValues = UseSystemValues();
 
 let barcodeValue = ref(); // reference to the barcode input element 
@@ -173,8 +169,7 @@ const scanResult = ( ) => {
     isError.value = false;
     errorMessage.value = '';
 
-    
-    const foundItems = UseItemsStore().getTotalItems.filter(e => e.itemCode == barcodeValue.value);
+    const foundItems = itemStore.getTotalItems.filter(e => e.itemCode.toUpperCase() == barcodeValue.value.toUpperCase());
     // if the item is out of stock
     if(foundItems.length>0 && foundItems[0].stock == 0){
         barcodeValue.value = null;
@@ -198,6 +193,7 @@ const scanResult = ( ) => {
         if (foundItemCart.length > 0) { // if the item was found in the cart reduce it stock by 1
             foundItemCart[0].stock--;
             foundItemCart[0].itemQuantity++;
+            foundItemCart[0].itemSubtotal = foundItemCart[0].itemQuantity * Number(foundItemCart[0].itemPrice); 
             barcodeValue.value = null;
             isSearchingCode.value = false;            
     } else if (foundItemCart.length == 0) { // if the item was not found in the cart, adding it as new
@@ -212,20 +208,29 @@ const scanResult = ( ) => {
             errorMessage.value = 'No se ha encontrado el producto. Por favor, revise el código o añádalo como nuevo producto si no está registrado.';
         }, 2000)
     }
-    
+    console.log('Total items', itemStore.getTotalItems);    
 }
+}
+
+// function to clear the barcode value
+const clearBarcode = () => {
+    barcodeValue.value = null;
+    isError.value = false;
+    errorMessage.value = '';
+    isSearchingCode.value = false;
 }
  //function to focus on the barcode input element
     const autoFocus = () => {
     if (barcodeInput.value) barcodeInput.value.focus();
 };
 
-// function to stop focus and start typing in the ammount received input
-const focusReceivedInput = () => {
-    if (timeoutId.value){
-        clearTimeout(timeoutId.value)
-    }
-} 
+//value to set the delete item from cart (boolean) that will show the delete icon
+let isDeletionActive = ref(false);
+
+// toogle the isDeletionActive value to show/hide the button to delete item form list
+const toggleIsDelectionActive = () => isDeletionActive.value = !isDeletionActive.value;
+
+
 
 const barcodeInput = ref();
 onMounted( () =>{
@@ -258,7 +263,7 @@ onUnmounted(() => {
 }
 
 .list-leave-active {
-  background-color: rgb(255, 178, 13);
+  background-color: rgb(0, 0, 0);
   position: absolute;
 }
 
