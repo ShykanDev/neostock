@@ -213,7 +213,8 @@ export const UseItemsStore = defineStore('UseItemStore',{
                 itemInSystem.stock = newStock;
             // Now push the new item in system to the cart (a shallow copy to prevent to link the original item to be modified)
                 const copyItemInSystem = {...itemInSystem};
-                copyItemInSystem.stock = 0;
+                copyItemInSystem.stock = newStock;
+                copyItemInSystem.stock--;
                 copyItemInSystem.itemQuantity = 1;
                 copyItemInSystem.itemSubtotal = copyItemInSystem.itemPrice * copyItemInSystem.itemQuantity;
                 this.cart.push(copyItemInSystem);

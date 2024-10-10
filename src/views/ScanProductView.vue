@@ -40,7 +40,7 @@
                             </div>
                         </div>
                         <div v-for="(item, index) in itemStore.getCartItems" :key="item.itemCode"
-                         :class="{'bg-white': index % 2 === 0, 'bg-slate-50' : index % 2 !== 0}"   class="flex items-center w-full py-3 mb-2 rounded-lg shadow-sm justify-evenly font-poppins hover:bg-gray-100 hover:shadow-md">
+                         :class="{'bg-white': index % 2 === 0, 'bg-slate-50' : index % 2 !== 0}"   class="flex items-center w-full py-3 mb-2 rounded-lg shadow-sm justify-evenly font-poppins hover:bg-sky-100 hover:shadow-md">
                             <div class="min-w-[7.6%] flex justify-center items-center">
                                 <p
                                     class="inline-block text-black shadow-sm font-bold bg-white rounded-full min-w-[25%]">
@@ -68,8 +68,13 @@
                                     scale="1.5" color="#0369a1" />
                             </div>
                             <div class="min-w-[15.35%] flex justify-center items-center">
-                                <p :class="{'text-sky-800 bg-white shadow-md border-sky-800': item.stock > 5, 'text-red-600 bg-white shadow-md border-red-500': item.stock <= 5}" class="inline-block  border  shadow-sm font-bold  rounded-lg min-w-[25%]">
-                                    {{ item.stock }}</p>
+                                <div class="flex flex-wrap items-center justify-around w-[50%]">
+                                    <v-icon v-if="item.stock <=5" :class="{'text-red-600' : item.stock == 0,  'text-yellow-400' : item.stock <= 5 && item.stock > 0 }"
+                                    class="cursor-pointer" name="md-warning-round"
+                                    scale="1.5"  title="La existencia de este producto es baja"/>
+                                    <p :class="{'text-sky-800 bg-white shadow-md border-sky-800': item.stock > 5, 'border-red-600 text-red-600' : item.stock == 0, 'text-yellow-600 bg-white shadow-md border-yellow-500': item.stock <= 5 && item.stock > 0}" class="inline-block px-3 border  shadow-sm font-bold  rounded-lg min-w-[25%]">
+                                        {{ item.stock }}</p>
+                                </div>
                             </div>
                             <p class="inline-block text-base font-semibold  min-w-[15.35%]">{{ item.itemCode }}</p>
                             <div class="min-w-[15.35%]">
@@ -92,14 +97,13 @@
                          </div>
                         <h2 v-show="isError" class="mt-2 font-semibold text-sky-700 font-poppins">{{ errorMessage }}
                         </h2>
-                        <LoaderDots v-show="isSearchingCode && barcodeValue" />
+                        <LoaderDots v-show="isSearchingCode && barcodeValue"/>
                     </div>
-                    <div class="absolute bottom-0 flex items-center justify-around w-full px-2 bg-white rounded-tr-md rounded-tl-md min-h-11 ">
+                    <!-- <div class="absolute bottom-0 flex items-center justify-around w-full px-2 bg-white rounded-tr-md rounded-tl-md min-h-11 ">
                         <div class="flex items-center justify-center gap-1">
                                 <input @blur="autoFocus" @input="scanResult" v-model="barcodeValue" ref="barcodeInput"
                                 class="text-xl font-semibold text-center rounded-md shadow-sm outline-none placeholder:text-slate-100 text-white bg-slate-900 font-poppins min-w-28 max-w-[350px]"
                                 type="text" placeholder="Escanear o ingresar">
-                                <!-- <img src="../assets/barcode-scanner.svg" class="w-8" alt=""> -->
                                 <v-icon  
                                     @click="clearBarcode"
                                     class="cursor-pointer active:text-red-900 hover:text-red-500 hover:scale-110"
@@ -119,6 +123,34 @@
                         </div>
                         <div>
                             <h3 class="p-1 px-2 text-xl font-semibold text-white rounded-md font-poppins bg-sky-800">Total: ${{ itemStore.getTotalCartPrice }}
+                            </h3>
+                        </div>
+                    </div> -->
+                    <div class="absolute bottom-0 flex items-center justify-around w-full px-2 bg-white rounded-tr-md rounded-tl-md min-h-11 ">
+                        <div class="flex items-center justify-center gap-1">
+                            <input @blur="autoFocus" @input="scanResult" v-model="barcodeValue" ref="barcodeInput"
+                            class="text-lg font-semibold text-center rounded-md shadow-sm outline-none hover:border  placeholder:text-gray-100 text-white bg-cyan-800 font-poppins min-w-28 max-w-[350px]"
+                            type="text" placeholder="Escanear o ingresar">
+                            <v-icon  
+                                @click="clearBarcode"
+                                class="cursor-pointer active:text-cyan-700 hover:text-cyan-500 hover:scale-110"
+                                name="ri-delete-back-2-fill" scale="1.5" color="#0891b2" />
+                        </div>
+                        <div>
+                            <div :class="{'bg-cyan-900 hover:bg-cyan-950' : !isDeletionActive, 'bg-red-800 hover:bg-red-600': isDeletionActive}" class="px-4 py-[6px] font-medium text-white transition duration-150 ease-in-out rounded-lg cursor-pointer font-poppins"
+                            @click="toggleIsDelectionActive"
+                            >
+                            <p v-if="!isDeletionActive">Eliminar producto</p>
+                            <p v-if="isDeletionActive">Desactivar eliminación</p>
+                            </div>
+                        </div>
+                        <div>
+                            <button class="px-4 py-1 text-xl text-white transition duration-150 ease-in-out rounded-lg bg-cyan-900 hover:bg-cyan-700 font-poppins"
+                            >Vender
+                        </button>
+                        </div>
+                        <div>
+                            <h3 class="px-2 py-1 text-xl font-semibold text-white bg-teal-600 rounded-md font-poppins">Total: ${{ itemStore.getTotalCartPrice }}
                             </h3>
                         </div>
                     </div>

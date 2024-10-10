@@ -1,5 +1,5 @@
 <template>
-    <div class="flex bg-slate-100 w-dvw">
+    <div class="flex bg-gray-200 w-dvw">
         <!-- Top bar -->
        <div class="z-50">
         <slot name="top-bar">

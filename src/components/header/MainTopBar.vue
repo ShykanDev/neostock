@@ -1,7 +1,7 @@
 <template>
-    <div class="bg-slate-50 shadow-[-20px_21px_13px_10px_#00000024] h-dvh rounded-tr-sm">
+    <div class="bg-white shadow-[-20px_21px_13px_10px_#00000024] h-dvh rounded-tr-sm">
         <div class="flex items-center justify-center gap-2 py-2">
-            <h1 class="text-xl text-black font-poppins">Neo Stock</h1>
+            <h1 class="text-xl font-bold text-black font-poppins">Neo Stock</h1>
         </div>
         <!-- Section of all views -->
         <article class="flex flex-col flex-wrap items-start gap-3 p-2 font-semibold select-none font-poppins">
