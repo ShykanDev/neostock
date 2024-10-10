@@ -8,7 +8,7 @@
                             <AddItemStock class="" :item-name="itemName" :item-code="itemCode"/>
                         </div>
                     </div>
-                    <TransitionGroup name="list" tag="ul" class="">
+                    <TransitionGroup name="list" tag="div" class="">
                         <div class="flex py-2 mb-2 bg-white rounded-b-lg shadow-md">
                             <div class="min-w-[7.6%] rounded-lg">
                                 <li class="inline-block px-1 text-lg font-bold font-poppins"
@@ -145,7 +145,7 @@
                             </div>
                         </div>
                         <div>
-                            <button class="px-4 py-1 text-xl text-white transition duration-150 ease-in-out rounded-lg bg-cyan-900 hover:bg-cyan-700 font-poppins"
+                            <button @click="handleSave" class="px-4 py-1 text-xl text-white transition duration-150 ease-in-out rounded-lg bg-cyan-900 hover:bg-cyan-700 font-poppins"
                             >Vender
                         </button>
                         </div>
@@ -186,7 +186,7 @@ let timeoutId:Ref<null|number> = ref(null); // reference to the timeoutId
 let itemName = ref('');
 let itemCode = ref();
 
-// function to execute when the user scans the barcode, it will search for the item and add it to the list, if it doesn't exist it will show an error
+// function to execute when the user scans the barcode, it will search for the item (in totalItems) and add it to the list, if it doesn't exist it will show an error
 const scanResult = ( ) => { 
     if (!barcodeValue.value) {
         isError.value = false;
@@ -262,7 +262,10 @@ let isDeletionActive = ref(false);
 // toogle the isDeletionActive value to show/hide the button to delete item form list
 const toggleIsDelectionActive = () => isDeletionActive.value = !isDeletionActive.value;
 
-
+// function to save sale
+const handleSave =():void=> {
+    console.log(itemStore.getCartItems);
+}
 
 const barcodeInput = ref();
 onMounted( () =>{
