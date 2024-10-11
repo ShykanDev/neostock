@@ -11,7 +11,7 @@ export const UseItemsStore = defineStore('UseItemStore',{
                     itemPrice: 50, // precio en números cerrados
                     itemCode: "7622210573216",
                     itemSubtotal: 0,
-                    stock:32 // subtotal inicialmente en 0
+                    stock:10
                 },
                 {
                     itemName: "Gel Ego",
@@ -19,7 +19,7 @@ export const UseItemsStore = defineStore('UseItemStore',{
                     itemPrice: 40,
                     itemCode: "7506306247482",
                     itemSubtotal: 0,
-                    stock:0
+                    stock:10
                 },
                 {
                     itemName: "Tenis Refil",
@@ -27,7 +27,7 @@ export const UseItemsStore = defineStore('UseItemStore',{
                     itemPrice: 35,
                     itemCode: "7508635007270070349",
                     itemSubtotal: 0,
-                    stock:15
+                    stock:10
                 },
                 {
                     itemName: "Rubor en Polvo",
@@ -35,7 +35,7 @@ export const UseItemsStore = defineStore('UseItemStore',{
                     itemPrice: 60,
                     itemCode: "67630471960817727",
                     itemSubtotal: 0,
-                    stock:16
+                    stock:10
                 },
                 {
                     itemName: "Paracetamol 650mg tableta",
@@ -43,7 +43,7 @@ export const UseItemsStore = defineStore('UseItemStore',{
                     itemPrice: 55,
                     itemCode: "7501644753060",
                     itemSubtotal: 0,
-                    stock:18
+                    stock:10
                 },
                 {
                     itemName: "Caja de carton",
@@ -51,7 +51,7 @@ export const UseItemsStore = defineStore('UseItemStore',{
                     itemPrice: 45,
                     itemCode: "BZMS47464",
                     itemSubtotal: 0,
-                    stock:16
+                    stock:10
                 },
                 {
                     itemName: "Toallitas Humedas KleenBebé",
@@ -59,7 +59,7 @@ export const UseItemsStore = defineStore('UseItemStore',{
                     itemPrice: 70,
                     itemCode: "7501943471900",
                     itemSubtotal: 0,
-                    stock:18
+                    stock:10
                 },
                 {
                     itemName: "Amoxicilina",
@@ -67,7 +67,7 @@ export const UseItemsStore = defineStore('UseItemStore',{
                     itemPrice: 30,
                     itemCode: "7501349021570",
                     itemSubtotal: 0,
-                    stock:13
+                    stock:10
                 },
                 {
                     itemName: "Bicoestol Eucalipto",
@@ -75,7 +75,7 @@ export const UseItemsStore = defineStore('UseItemStore',{
                     itemPrice: 25,
                     itemCode: "714706910487",
                     itemSubtotal: 0,
-                    stock:56
+                    stock:10
                 },
                 {
                     itemName: "Paracetamol 500mg tableta",
@@ -83,7 +83,7 @@ export const UseItemsStore = defineStore('UseItemStore',{
                     itemPrice: 15,
                     itemCode: "7501361682094",
                     itemSubtotal: 0,
-                    stock:16
+                    stock:10
                 },
                 {
                     itemName: "Mascara de Pestañas",
@@ -91,7 +91,7 @@ export const UseItemsStore = defineStore('UseItemStore',{
                     itemPrice: 50,
                     itemCode: "225325471358502",
                     itemSubtotal: 0,
-                    stock:35
+                    stock:10
                 },
                 {
                     itemName: "Lápiz de Labios",
@@ -99,7 +99,7 @@ export const UseItemsStore = defineStore('UseItemStore',{
                     itemPrice: 45,
                     itemCode: "1991024575390",
                     itemSubtotal: 0,
-                    stock:12
+                    stock:10
                 },
                 {
                     itemName: "Disco Estado Solido",
@@ -107,7 +107,7 @@ export const UseItemsStore = defineStore('UseItemStore',{
                     itemPrice: 25,
                     itemCode: "IYEX07108",
                     itemSubtotal: 0,
-                    stock:18
+                    stock:10
                 },
                 {
                     itemName: "Baygon Total",
@@ -115,7 +115,7 @@ export const UseItemsStore = defineStore('UseItemStore',{
                     itemPrice: 80,
                     itemCode: "7503036165215",
                     itemSubtotal: 0,
-                    stock:0
+                    stock:10
                 },
                 {
                     itemName: "Alcohol Etílico 250ml",
@@ -123,7 +123,7 @@ export const UseItemsStore = defineStore('UseItemStore',{
                     itemPrice: 20,
                     itemCode: "7501020607086",
                     itemSubtotal: 0,
-                    stock:0
+                    stock:10
                 },
             ],
             cart:[] as Array<IItem>
@@ -222,8 +222,25 @@ export const UseItemsStore = defineStore('UseItemStore',{
             }
             console.log("There was an error while trying to add stock");   
         },
+        // function to delete an item from the cart based on the index
         deleteItemCart(indexToDelete:number):void{
             this.cart.splice(indexToDelete,1)
         },
+        // edit the original stock based on the cart items
+        editTotalStock():void{
+            console.log('Antes de la modificación:', this.totalItems.map(e => ({...e})));
+            this.cart.forEach( cartItem => {
+                const itemToEdit = this.totalItems.find( origItem => origItem.itemCode === cartItem.itemCode);
+                if(itemToEdit){
+                    itemToEdit.stock = cartItem.stock;
+                }
+            })
+            console.log('Después de la modificación:', this.totalItems)
+        },
+        clearCart():void{
+            this.cart = [];
+        }
+     
+        
     }
 })

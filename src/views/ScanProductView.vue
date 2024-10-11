@@ -8,6 +8,11 @@
                             <AddItemStock class="" :item-name="itemName" :item-code="itemCode"/>
                         </div>
                     </div>
+                    <section v-if="systemValues.getIsSaleConfirmationView"  class="w-full">
+                        <div class="absolute top-0 bottom-0 left-0 right-0 flex items-center justify-center bg-black bg-opacity-25">
+                        <SaleConfirmation :total="itemStore.getTotalCartPrice" />
+                        </div>
+                    </section>
                     <TransitionGroup name="list" tag="div" class="">
                         <div class="flex py-2 mb-2 bg-white rounded-b-lg shadow-md">
                             <div class="min-w-[7.6%] rounded-lg">
@@ -72,7 +77,7 @@
                                     <v-icon v-if="item.stock <=5" :class="{'text-red-600' : item.stock == 0,  'text-yellow-400' : item.stock <= 5 && item.stock > 0 }"
                                     class="cursor-pointer" name="md-warning-round"
                                     scale="1.5"  title="La existencia de este producto es baja"/>
-                                    <p :class="{'text-sky-800 bg-white shadow-md border-sky-800': item.stock > 5, 'border-red-600 text-red-600' : item.stock == 0, 'text-yellow-600 bg-white shadow-md border-yellow-500': item.stock <= 5 && item.stock > 0}" class="inline-block px-3 border  shadow-sm font-bold  rounded-lg min-w-[25%]">
+                                    <p :class="{'text-sky-800 bg-white shadow-md border-sky-800': item.stock > 5, 'border-red-600 text-red-600' : item.stock == 0, 'text-yellow-600 bg-white shadow-md border-yellow-500': item.stock <= 5 && item.stock > 0}" class="inline-block px-3 border select-none shadow-sm font-bold  rounded-lg min-w-[25%]">
                                         {{ item.stock }}</p>
                                 </div>
                             </div>
@@ -163,6 +168,7 @@
 <script lang="ts" setup>
 import LoaderDots from '@/animations/LoaderDots.vue';
 import AddItemStock from '@/components/ScanProductView/AddItemStock.vue';
+import SaleConfirmation from '@/components/ScanProductView/SaleConfirmation.vue';
 import MainLayout from '@/layouts/MainLayout.vue';
 import { UseItemsStore } from '@/store/UseItemsStore';
 import { UseSystemValues } from '@/store/UseSystemValues';
@@ -253,7 +259,7 @@ const clearBarcode = () => {
 }
  //function to focus on the barcode input element
     const autoFocus = () => {
-    if (barcodeInput.value) barcodeInput.value.focus();
+    // if (barcodeInput.value) barcodeInput.value.focus();
 };
 
 //value to set the delete item from cart (boolean) that will show the delete icon
@@ -263,9 +269,7 @@ let isDeletionActive = ref(false);
 const toggleIsDelectionActive = () => isDeletionActive.value = !isDeletionActive.value;
 
 // function to save sale
-const handleSave =():void=> {
-    console.log(itemStore.getCartItems);
-}
+const handleSave =():void=> systemValues.setIsSaleConfirmationView(true);
 
 const barcodeInput = ref();
 onMounted( () =>{
