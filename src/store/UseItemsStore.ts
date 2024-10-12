@@ -233,6 +233,8 @@ export const UseItemsStore = defineStore('UseItemStore',{
                 const itemToEdit = this.totalItems.find( origItem => origItem.itemCode === cartItem.itemCode);
                 if(itemToEdit){
                     itemToEdit.stock = cartItem.stock;
+                    // same functionality but this time with an splice method
+                    // this.totalItems.splice(this.totalItems.indexOf(itemToEdit), 1, cartItem);
                 }
             })
             console.log('Después de la modificación:', this.totalItems)

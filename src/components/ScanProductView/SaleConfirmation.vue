@@ -59,7 +59,7 @@ const confirmSale = (): void => {
             alert('No se puede realizar la venta debido a que el monto que el cliente paga es menor al total de la venta');
             return;
         }
-        if (userPayment.value > props.total) {
+        if (userPayment.value >= props.total) {
             itemStore.editTotalStock();
             itemStore.clearCart();
             alert('La venta se realizo con exito')
