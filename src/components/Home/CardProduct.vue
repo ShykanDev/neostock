@@ -2,9 +2,11 @@
   <div>
     <div
       class="p-4 text-center transition-transform duration-200 bg-white border border-gray-200 shadow-md rounded-xl w-80 font-poppins hover:scale-[1.02] hover:border hover:border-cyan-800">
+      <!-- product name -->
       <div class="flex items-start gap-1">
         <h2 v-show="!isEditionName" class="mb-3 text-xl font-semibold text-cyan-800">{{ props.itemName }}</h2>
         <input
+        @input="updateUserChanges()"
           class="w-full border-b-[1px] border-cyan-800 shadow-sm focus:outline-none text-xl font-semibold text-cyan-700"
           type="text" v-model="newItemName" v-show="isEditionName" ref="inputName">
         <v-icon @click="toggleEditionElement('name')" v-show="!isEditionName && isEditionActive"
@@ -12,12 +14,13 @@
         <v-icon @click="toggleEditionElement('name')" v-show="isEditionName && isEditionActive"
           class="text-orange-600 cursor-pointer" name="ri-arrow-go-back-line" scale="1.5" />
       </div>
+      <!-- product code -->
       <div class="flex gap-1">
         <p v-show="!isEditionCode" class="mb-1 text-slate-700"><strong>Codigo del articulo:</strong> {{ props.itemCode
           }}</p>
         <div class="flex flex-col items-center">
           <p v-show="isEditionCode">Codigo del articulo:</p>
-          <input v-show="isEditionCode" type="text" v-model="newItemCode"
+          <input @input="updateUserChanges()" v-show="isEditionCode" type="text" v-model="newItemCode"
             class="w-full border-b-[1px] border-orange-700 text-orange-600 shadow-sm focus:outline-none" ref="inputCode">
         </div>
         <v-icon @click="toggleEditionElement('code')" v-show="!isEditionCode && isEditionActive"
@@ -25,25 +28,27 @@
         <v-icon @click="toggleEditionElement('code')" v-show="isEditionCode && isEditionActive"
           class="text-orange-600 cursor-pointer" name="ri-arrow-go-back-line" scale="1.5" />
       </div>
+      <!-- product price -->
       <div class="flex gap-1">
         <p v-show="!isEditionPrice" class="mb-2 text-lg text-slate-700"><strong>Precio:</strong> ${{ props.itemPrice }}
         </p>
         <div class="flex flex-col items-center">
           <p v-show="isEditionPrice" class="text-lg font-semibold text-slate-700">Precio:</p>
-          <input v-show="isEditionPrice" type="number" v-model="newItemPrice"
-            class="w-full text-center border-b-[1px] border-emerald-700 text-emerald-600 shadow-sm focus:outline-none font-semibold" ref="inputPrice">
+          <input @input="updateUserChanges()" v-show="isEditionPrice" type="number" v-model="newItemPrice"
+            class="w-full text-center border-b-[1px] border-emerald-700 text-emerald-600 shadow-sm focus:outline-none font-semibold" ref="inputPrice" min="0">
         </div>
         <v-icon @click="toggleEditionElement('price')" v-show="!isEditionPrice && isEditionActive"
           class="text-orange-600 cursor-pointer" name="fa-edit" scale="1.5" />
         <v-icon @click="toggleEditionElement('price')" v-show="isEditionPrice && isEditionActive"
           class="text-orange-600 cursor-pointer" name="ri-arrow-go-back-line" scale="1.5" />
       </div>
+      <!-- product stock -->
       <div class="flex gap-1">
         <p v-show="!isEditionStock" class="text-lg text-slate-700"><strong>Existencia:</strong> {{ props.stock }}</p>
         <div class="flex flex-col items-center">
           <p v-show="isEditionStock" class="text-lg font-semibold text-slate-700">Existencia:</p>
-          <input v-show="isEditionStock" type="number" v-model="newItemStock"
-            class="w-full border-b-[1px] border-slate-700 text-sky-700 shadow-sm focus:outline-none font-semibold" ref="inputStock">
+          <input @input="updateUserChanges()" v-show="isEditionStock" type="number" v-model="newItemStock"
+            class="w-full border-b-[1px] border-slate-700 text-sky-700 shadow-sm focus:outline-none font-semibold" ref="inputStock" min="0">
         </div>
         <v-icon @click="toggleEditionElement('stock')" v-show="!isEditionStock && isEditionActive"
           class="text-orange-600 cursor-pointer" name="fa-edit" scale="1.5" />
@@ -56,7 +61,7 @@
           :class="isEditionActive ? 'bg-red-600 hover:bg-red-500' : 'bg-emerald-600 hover:bg-emerald-500'">
           {{ isEditionActive ? 'Cancelar' : 'Editar ' }}
         </button>
-        <button v-show="isEditionActive" class="px-4 py-2 mt-2 text-white transition duration-150 ease-in-out rounded-lg bg-sky-700 hover:bg-sky-500">Guardar</button>
+        <button  @click="saveUpdates" v-show="isEditionActive" class="px-4 py-2 mt-2 text-white transition duration-150 ease-in-out rounded-lg bg-sky-700 hover:bg-sky-500">Guardar</button>
         <!-- <button class="px-4 py-2 mt-2 text-white transition duration-150 ease-in-out bg-red-900 rounded-lg hover:bg-red-500">Eliminar Producto</button> -->
       </div>
     </div>
@@ -64,7 +69,10 @@
 </template>
 
 <script lang="ts" setup>
-import { defineProps, nextTick, ref } from 'vue';
+import { IItem } from '@/interfaces/IItem';
+import { INewItem } from '@/interfaces/INewItem';
+import { UseItemsStore } from '@/store/UseItemsStore';
+import { defineProps, nextTick, reactive, Ref, ref } from 'vue';
 
 const props = defineProps({
   itemName: {
@@ -86,9 +94,14 @@ const props = defineProps({
     type: Number,
     required: true,
     default: 10
+  },
+  index:{
+    type:Number,
+    required:true,
   }
 })
-
+// store items
+const itemStore = UseItemsStore();
 
 // new ref values for edition
 let newItemName = ref(props.itemName);
@@ -179,6 +192,7 @@ const toggleEditionElement = (element: string):void => {
       isEditionCode.value = false;
       isEditionPrice.value = false;
       isEditionStock.value = false;
+      // set the userChanges object to its defaults values
       break;
   }
 }
@@ -189,6 +203,48 @@ const toggleEditionActive = () => {
   isEditionActive.value = !isEditionActive.value;
   toggleEditionElement('allFalse');
   resetNewValue('restoreAll');
+}
+
+// const value to store the user changes
+let userChanges = reactive<INewItem>({
+  newItemName : props.itemName,
+  newItemCode : newItemCode.value,
+  newItemPrice : newItemPrice.value, 
+  newItemStock : newItemStock.value,
+})
+
+// function to add changes added to userChanges
+const updateUserChanges = ():void =>{
+  console.clear()
+  const userChangesBeforeUpdate = ({...userChanges})
+  console.log(`UserChanges before update: ${JSON.stringify(userChangesBeforeUpdate)}` );  
+  userChanges.newItemName = newItemName.value;
+  userChanges.newItemCode = newItemCode.value;
+  userChanges.newItemPrice = newItemPrice.value;
+  userChanges.newItemStock = newItemStock.value;
+  // switch (valueToUpdate) {
+  //   case 'name':
+  //     userChanges.newItemName = newItemName.value;
+  //     break;
+  //   case 'code':
+  //     userChanges.newItemCode = newItemCode.value;
+  //     break;
+  //   case 'price':
+  //     userChanges.newItemPrice = newItemPrice.value;
+  //     break;
+  //   case 'stock':
+  //     userChanges.newItemStock = newItemStock.value;
+  //     break;
+  // }
+  console.log(`UserChanges after ${JSON.stringify(userChanges)}`);
+}
+
+// function to save the update
+const saveUpdates = () => {
+    itemStore.editOriginalItem({...userChanges}, props.index)
+    isEditionActive.value = false;
+    toggleEditionElement('allFalse');
+    
 }
 </script>
 

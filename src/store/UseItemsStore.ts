@@ -1,4 +1,5 @@
 import { IItem } from "@/interfaces/IItem";
+import { INewItem } from "@/interfaces/INewItem";
 import { defineStore } from "pinia";
 
 export const UseItemsStore = defineStore('UseItemStore',{
@@ -239,8 +240,22 @@ export const UseItemsStore = defineStore('UseItemStore',{
             })
             console.log('Después de la modificación:', this.totalItems)
         },
+        // clear the cart
         clearCart():void{
             this.cart = [];
+        },
+        // edit the original item by the param (stock, name, etc)
+        editOriginalItem(newObject:INewItem, index:number):void {
+            const itemToEdit = this.totalItems[index];
+            if (itemToEdit) {
+                console.log(`Item to edit : ${JSON.stringify(itemToEdit)}`);
+                itemToEdit.itemName = newObject.newItemName;
+                itemToEdit.itemCode = newObject.newItemCode;
+                itemToEdit.itemPrice = newObject.newItemPrice;
+                itemToEdit.stock = newObject.newItemStock;
+            }
+            else console.log('Error while trying to update the values from total items');
+            
         }
      
         

@@ -8,8 +8,8 @@
                             class="w-full p-2 border border-gray-300 rounded-lg font-poppins focus:outline-none focus:ring-2 focus:ring-blue-500" />
                     </div>
                     <section class="flex flex-wrap justify-around gap-2 px-2 py-20">
-                        <CardProduct v-for="item in searchResult" :key="item.itemCode"
-                            :item-code="item.itemCode" :item-name="item.itemName" :item-price="item.itemPrice" :stock="item.stock" />
+                        <CardProduct v-for="(item, index) in searchResult" :key="item.itemCode"
+                            :item-code="item.itemCode" :item-name="item.itemName" :item-price="item.itemPrice" :stock="item.stock" :index="index"/>
                     </section>
                 </div>
             </template>
@@ -32,13 +32,13 @@ let searchResult: Ref<IItem[]> = ref(itemStore.getTotalItems);
 // vmodel for the input 
 let searchFilter = ref('');
 
-const filterItems = () => {
-    searchResult.value = itemStore.getTotalItems.filter((item) => item.itemName.toLowerCase().includes(searchFilter.value.toLowerCase()));
-};
+// function to filter the items by name 
+const filterItems = () => searchResult.value = itemStore.getTotalItems.filter((item) => item.itemName.toLowerCase().includes(searchFilter.value.toLowerCase()));
 
 // ref for input search
 const inputSearch = ref();
 
+// function to focus the input element for the search bar (used onmounted)
 const focusInput =():void => {
     if (inputSearch.value) inputSearch.value.focus();
 };
