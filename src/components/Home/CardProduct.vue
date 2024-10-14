@@ -62,6 +62,7 @@
           {{ isEditionActive ? 'Cancelar' : 'Editar ' }}
         </button>
         <button  @click="saveUpdates" v-show="isEditionActive" class="px-4 py-2 mt-2 text-white transition duration-150 ease-in-out rounded-lg bg-sky-700 hover:bg-sky-500">Guardar</button>
+
         <!-- <button class="px-4 py-2 mt-2 text-white transition duration-150 ease-in-out bg-red-900 rounded-lg hover:bg-red-500">Eliminar Producto</button> -->
       </div>
     </div>
@@ -240,12 +241,40 @@ const updateUserChanges = ():void =>{
 }
 
 // function to save the update
-const saveUpdates = () => {
-    itemStore.editOriginalItem({...userChanges}, props.index)
-    isEditionActive.value = false;
-    toggleEditionElement('allFalse');
-    
+const saveUpdates = ():boolean => {
+  try {
+    // itemStore.editOriginalItem({...userChanges}, props.index)
+    if (itemStore.editOriginalItem({...userChanges}, props.index)){
+      isEditionActive.value = false;
+      toggleEditionElement('allFalse');
+      showToastSuccess();
+      return true;
+    }
+    showToastError();
+    return false;
+  } catch (e){
+    showToastError();
+    console.log(e)
+    return false;
+  }
 }
+
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
+
+const showToastSuccess = () => {
+    toast('Datos actualizados correctamente', {
+        type: 'success',
+        autoClose: 3000,
+      });
+}
+const showToastError = () => {
+    toast('Ha ocurrido un error, intentalo de nuevo', {
+        type: 'error',
+        autoClose: 3000,
+      });
+}
+
 </script>
 
 <style scoped></style>

@@ -245,17 +245,22 @@ export const UseItemsStore = defineStore('UseItemStore',{
             this.cart = [];
         },
         // edit the original item by the param (stock, name, etc)
-        editOriginalItem(newObject:INewItem, index:number):void {
-            const itemToEdit = this.totalItems[index];
-            if (itemToEdit) {
-                console.log(`Item to edit : ${JSON.stringify(itemToEdit)}`);
-                itemToEdit.itemName = newObject.newItemName;
-                itemToEdit.itemCode = newObject.newItemCode;
-                itemToEdit.itemPrice = newObject.newItemPrice;
-                itemToEdit.stock = newObject.newItemStock;
-            }
-            else console.log('Error while trying to update the values from total items');
-            
+        editOriginalItem(newObject:INewItem, index:number):boolean {
+            try {
+                const itemToEdit = this.totalItems[index];
+                if (itemToEdit) {
+                    console.log(`Item to edit : ${JSON.stringify(itemToEdit)}`);
+                    itemToEdit.itemName = newObject.newItemName;
+                    itemToEdit.itemCode = newObject.newItemCode;
+                    itemToEdit.itemPrice = newObject.newItemPrice;
+                    itemToEdit.stock = newObject.newItemStock;
+                    return true;
+                }
+                return false
+            } catch (error) {
+                console.log(error);
+                return false
+            }            
         }
      
         

@@ -2,7 +2,7 @@
     <div class="">
         <MainLayout>
             <template #main-content>
-                <div class="relative flex flex-col flex-1 w-full overflow-auto h-dvh">
+                <div class="relative flex flex-col flex-1 w-full overflow-auto bg-slate-100 h-dvh">
                     <div v-if="systemValues.getIsOutOfStockScanView" class="w-full bg-black">
                         <div class="absolute top-0 bottom-0 left-0 right-0 flex items-center justify-center bg-black bg-opacity-25">
                             <AddItemStock class="" :item-name="itemName" :item-code="itemCode"/>
@@ -14,33 +14,33 @@
                         </div>
                     </section>
                     <TransitionGroup name="list" tag="div" class="">
-                        <div class="flex py-2 mb-2 bg-white rounded-b-lg shadow-md">
+                        <div class="flex py-2 mb-2 bg-white rounded-b-lg shadow-sm">
                             <div class="min-w-[7.6%] rounded-lg">
-                                <li class="inline-block px-1 text-lg font-bold font-poppins"
+                                <li class="inline-block px-1 text-lg font-bold text-cyan-800 font-poppins"
                                     title="Posicion del producto en el carrito">Pos</li>
                             </div>
                             <div class="min-w-[15.35%] rounded-lg bg-white ">
-                                <li class="inline-block px-1 text-lg font-bold font-poppins" title="Nombre del producto">
+                                <li class="inline-block px-1 text-lg font-bold text-cyan-800 font-poppins" title="Nombre del producto">
                                     Producto</li>
                             </div>
                             <div class="min-w-[15.35%] rounded-lg bg-white ">
-                                <li class="inline-block px-1 text-lg font-bold font-poppins"
+                                <li class="inline-block px-1 text-lg font-bold text-cyan-800 font-poppins"
                                     title="Cantidad de veces que se venderá el producto">Cantidad</li>
                             </div>
                             <div class="min-w-[15.35%] rounded-lg bg-white ">
-                                <li class="inline-block px-1 text-lg font-bold font-poppins"
+                                <li class="inline-block px-1 text-lg font-bold text-cyan-800 font-poppins"
                                     title="Cuantos hay en existencia o stock">Existencia</li>
                             </div>
                             <div class="min-w-[15.35%] rounded-lg bg-white ">
-                                <li class="inline-block px-1 text-lg font-bold font-poppins"
+                                <li class="inline-block px-1 text-lg font-bold text-cyan-800 font-poppins"
                                     title="Código del producto en el sistema">Código</li>
                             </div>
                             <div class="min-w-[15.35%] rounded-lg bg-white ">
-                                <li class="inline-block px-1 text-lg font-bold font-poppins"
+                                <li class="inline-block px-1 text-lg font-bold text-cyan-800 font-poppins"
                                     title="Precio por unidad del producto">Precio</li>
                             </div>
                             <div class="min-w-[15.35%] rounded-lg bg-white">
-                                <li class="inline-block px-1 text-lg font-bold font-poppins"
+                                <li class="inline-block px-1 text-lg font-bold text-cyan-800 font-poppins"
                                     title="Valor del producto multiplicado por la cantidad">Subtotal</li>
                             </div>
                         </div>
@@ -95,7 +95,7 @@
                         </div>
                     </TransitionGroup>
                     <div v-if="itemStore.getCartItems.length === 0" class="">
-                        <h1 class="text-3xl font-medium font-poppins">Escanee o ingrese manualmente el código de barras</h1>
+                        <h1 class="text-3xl font-medium font-poppins text-cyan-900">Escanee o ingrese manualmente el código de barras</h1>
                         <!-- <h2 v-show="isSearchingCode" class="text-3xl">{{ isSearchingMessage }}</h2> -->
                          <div class="flex justify-center">
                              <img src="../assets/Qr Code.gif" class="w-20" alt="">
@@ -173,6 +173,8 @@ import MainLayout from '@/layouts/MainLayout.vue';
 import { UseItemsStore } from '@/store/UseItemsStore';
 import { UseSystemValues } from '@/store/UseSystemValues';
 import { onMounted, onUnmounted, Ref, ref } from 'vue';
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
 
 // items Store
 const itemStore = UseItemsStore();
@@ -268,9 +270,28 @@ let isDeletionActive = ref(false);
 // toogle the isDeletionActive value to show/hide the button to delete item form list
 const toggleIsDelectionActive = () => isDeletionActive.value = !isDeletionActive.value;
 
-// function to save sale
-const handleSave =():void=> systemValues.setIsSaleConfirmationView(true);
+// error toasts (visual)
+const showToast = () => {
+    toast('Se eliminó el item correctamente', {
+        type: 'default',
+        autoClose: 3000,
+      });
+}
+const showToastWarning = () => {
+    toast('Necesitas tener al menos un item en tu carrito', {
+        type: 'warning',
+        autoClose: 3000,
+      });
+}
 
+// function to save sale
+const handleSave =():void=> {
+    if(itemStore.getCartItems.length === 0){
+        showToastWarning();
+        return;
+    }
+    systemValues.setIsSaleConfirmationView(true);
+}
 const barcodeInput = ref();
 onMounted( () =>{
     autoFocus();
@@ -282,6 +303,9 @@ onUnmounted(() => {
     }
 })
 
+const number = 4;
+
+console.log((number % 2 == 0) ? 'Even' : 'Odd')
 </script>
 
 <style scoped>

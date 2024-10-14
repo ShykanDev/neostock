@@ -29,6 +29,21 @@
 import { UseItemsStore } from '@/store/UseItemsStore';
 import { UseSystemValues } from '@/store/UseSystemValues';
 import { computed, defineProps, onMounted, ref } from 'vue';
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
+
+const showToastSuccess = () => {
+    toast('La venta se realizo con exito!', {
+        type: 'success',
+        autoClose: 3000,
+      });
+}
+const showToastError = () => {
+    toast('No se puede vender ya que el dinero ingresado es insuficiente', {
+        type: 'error',
+        autoClose: 3000,
+      });
+}
 const systemValues = UseSystemValues();
 const itemStore = UseItemsStore();
 // prop received from ScanProductView (total of the sale)
@@ -56,13 +71,13 @@ const focusInput = ():void => {
 const confirmSale = (): void => {
     try {
         if (userPayment.value < props.total) {
-            alert('No se puede realizar la venta debido a que el monto que el cliente paga es menor al total de la venta');
+            showToastError();
             return;
         }
         if (userPayment.value >= props.total) {
             itemStore.editTotalStock();
             itemStore.clearCart();
-            alert('La venta se realizo con exito')
+            showToastSuccess();
             systemValues.setIsSaleConfirmationView(false);
             return;
         }
