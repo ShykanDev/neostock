@@ -54,7 +54,7 @@ const props = defineProps({
         required: true,
     },
 })
-const userPayment = ref(0);
+const userPayment = ref();
 let userChange =computed(()=> userPayment.value - props.total);
 let leftMoney = computed(()=> props.total - userPayment.value);
 // function to cancel the sale and set the isSaleConfirmationView to false

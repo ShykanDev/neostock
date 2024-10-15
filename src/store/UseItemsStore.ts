@@ -261,8 +261,16 @@ export const UseItemsStore = defineStore('UseItemStore',{
                 console.log(error);
                 return false
             }            
+        },
+        addNewItemToTotalItems(newItem:IItem):boolean{
+            try {
+                this.totalItems.push(newItem);
+                return true;
+            } catch (error) {
+                console.log(error); 
+                return false
+            }
         }
-     
         
     }
 })

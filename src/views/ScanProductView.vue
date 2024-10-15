@@ -271,12 +271,7 @@ let isDeletionActive = ref(false);
 const toggleIsDelectionActive = () => isDeletionActive.value = !isDeletionActive.value;
 
 // error toasts (visual)
-const showToast = () => {
-    toast('Se eliminó el item correctamente', {
-        type: 'default',
-        autoClose: 3000,
-      });
-}
+
 const showToastWarning = () => {
     toast('Necesitas tener al menos un item en tu carrito', {
         type: 'warning',

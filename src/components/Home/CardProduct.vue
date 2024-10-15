@@ -10,23 +10,23 @@
           class="w-full border-b-[1px] border-cyan-800 shadow-sm focus:outline-none text-xl font-semibold text-cyan-700"
           type="text" v-model="newItemName" v-show="isEditionName" ref="inputName">
         <v-icon @click="toggleEditionElement('name')" v-show="!isEditionName && isEditionActive"
-          class="text-orange-600 cursor-pointer" name="fa-edit" scale="1.5" />
+          class="cursor-pointer text-sky-600" name="fa-edit" scale="1.5" />
         <v-icon @click="toggleEditionElement('name')" v-show="isEditionName && isEditionActive"
-          class="text-orange-600 cursor-pointer" name="ri-arrow-go-back-line" scale="1.5" />
+          class="cursor-pointer text-sky-600" name="ri-arrow-go-back-line" scale="1.5" />
       </div>
       <!-- product code -->
       <div class="flex gap-1">
         <p v-show="!isEditionCode" class="mb-1 text-slate-700"><strong>Codigo del articulo:</strong> {{ props.itemCode
           }}</p>
         <div class="flex flex-col items-center">
-          <p v-show="isEditionCode">Codigo del articulo:</p>
+          <p v-show="isEditionCode" class="font-semibold text-slate-700">Codigo del articulo:</p>
           <input @input="updateUserChanges()" v-show="isEditionCode" type="text" v-model="newItemCode"
             class="w-full border-b-[1px] border-orange-700 text-orange-600 shadow-sm focus:outline-none" ref="inputCode">
         </div>
         <v-icon @click="toggleEditionElement('code')" v-show="!isEditionCode && isEditionActive"
-          class="text-orange-600 cursor-pointer" name="fa-edit" scale="1.5" />
+          class="cursor-pointer text-sky-600" name="fa-edit" scale="1.5" />
         <v-icon @click="toggleEditionElement('code')" v-show="isEditionCode && isEditionActive"
-          class="text-orange-600 cursor-pointer" name="ri-arrow-go-back-line" scale="1.5" />
+          class="cursor-pointer text-sky-600" name="ri-arrow-go-back-line" scale="1.5" />
       </div>
       <!-- product price -->
       <div class="flex gap-1">
@@ -38,9 +38,9 @@
             class="w-full text-center border-b-[1px] border-emerald-700 text-emerald-600 shadow-sm focus:outline-none font-semibold" ref="inputPrice" min="0">
         </div>
         <v-icon @click="toggleEditionElement('price')" v-show="!isEditionPrice && isEditionActive"
-          class="text-orange-600 cursor-pointer" name="fa-edit" scale="1.5" />
+          class="cursor-pointer text-sky-600" name="fa-edit" scale="1.5" />
         <v-icon @click="toggleEditionElement('price')" v-show="isEditionPrice && isEditionActive"
-          class="text-orange-600 cursor-pointer" name="ri-arrow-go-back-line" scale="1.5" />
+          class="cursor-pointer text-sky-600" name="ri-arrow-go-back-line" scale="1.5" />
       </div>
       <!-- product stock -->
       <div class="flex gap-1">
@@ -51,14 +51,14 @@
             class="w-full border-b-[1px] border-slate-700 text-sky-700 shadow-sm focus:outline-none font-semibold" ref="inputStock" min="0">
         </div>
         <v-icon @click="toggleEditionElement('stock')" v-show="!isEditionStock && isEditionActive"
-          class="text-orange-600 cursor-pointer" name="fa-edit" scale="1.5" />
+          class="cursor-pointer text-sky-600" name="fa-edit" scale="1.5" />
         <v-icon @click="toggleEditionElement('stock')" v-show="isEditionStock && isEditionActive"
-          class="text-orange-600 cursor-pointer" name="ri-arrow-go-back-line" scale="1.5" />
+          class="cursor-pointer text-sky-600" name="ri-arrow-go-back-line" scale="1.5" />
       </div>
       <div class="flex justify-between">
         <button @click="toggleEditionActive"
           class="px-4 py-2 mt-2 text-white transition duration-150 ease-in-out rounded-lg bg-emerald-600 hover:bg-emerald-500"
-          :class="isEditionActive ? 'bg-red-600 hover:bg-red-500' : 'bg-emerald-600 hover:bg-emerald-500'">
+          :class="isEditionActive ? 'bg-red-600 hover:bg-red-500' : 'bg-sky-900 hover:bg-sky-800'">
           {{ isEditionActive ? 'Cancelar' : 'Editar ' }}
         </button>
         <button  @click="saveUpdates" v-show="isEditionActive" class="px-4 py-2 mt-2 text-white transition duration-150 ease-in-out rounded-lg bg-sky-700 hover:bg-sky-500">Guardar</button>

@@ -4,10 +4,13 @@
             <template #main-content>
                 <div class="fixed top-0 bottom-0 left-[21%] right-0 py-2 overflow-auto">
                     <div class="fixed top-0 left-[19%] right-0 z-10 p-4 bg-white shadow-md">
-                        <input ref="inputSearch" @input="filterItems" type="text" v-model="searchFilter" placeholder="Buscar por nombre..."
+                        <h1 class="text-3xl font-medium font-poppins text-sky-800">Listado de todos los productos</h1>
+                        <div class="flex w-full">
+                            <input ref="inputSearch" @input="filterItems" type="text" v-model="searchFilter" placeholder="Buscar por nombre..."
                             class="w-full p-2 border border-gray-300 rounded-lg font-poppins focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                        </div>
                     </div>
-                    <section class="flex flex-wrap justify-around gap-2 px-2 py-20">
+                    <section class="flex flex-wrap justify-around gap-2 px-2 py-28">
                         <CardProduct v-for="(item, index) in searchResult" :key="item.itemCode"
                             :item-code="item.itemCode" :item-name="item.itemName" :item-price="item.itemPrice" :stock="item.stock" :index="index"/>
                     </section>
