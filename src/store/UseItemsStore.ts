@@ -245,9 +245,11 @@ export const UseItemsStore = defineStore('UseItemStore',{
             this.cart = [];
         },
         // edit the original item by the param (stock, name, etc)
-        editOriginalItem(newObject:INewItem, index:number):boolean {
+        editOriginalItem(newObject:INewItem, itemCodeParam:string):boolean {//CHANGE THIS FUNCTION INDEX PARAM SHOULD BE CHANGED TO itemCode and based on that get the index that matches the param
             try {
-                const itemToEdit = this.totalItems[index];
+                // TODO:Create a method that gets the index in the totalItems based on the itemCode param 
+
+                const itemToEdit = this.totalItems.find((e => e.itemCode === itemCodeParam ));
                 if (itemToEdit) {
                     console.log(`Item to edit : ${JSON.stringify(itemToEdit)}`);
                     itemToEdit.itemName = newObject.newItemName;

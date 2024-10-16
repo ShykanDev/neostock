@@ -244,7 +244,7 @@ const updateUserChanges = ():void =>{
 const saveUpdates = ():boolean => {
   try {
     // itemStore.editOriginalItem({...userChanges}, props.index)
-    if (itemStore.editOriginalItem({...userChanges}, props.index)){
+    if (itemStore.editOriginalItem({...userChanges}, props.itemCode)){
       isEditionActive.value = false;
       toggleEditionElement('allFalse');
       showToastSuccess();
