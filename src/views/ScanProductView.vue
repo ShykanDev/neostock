@@ -95,8 +95,6 @@
                         </div>
                     </TransitionGroup>
                     <div v-if="itemStore.getCartItems.length === 0" class="">
-                        <h1 class="text-3xl font-medium font-poppins text-cyan-900">Escanee o ingrese manualmente el código de barras</h1>
-                        <!-- <h2 v-show="isSearchingCode" class="text-3xl">{{ isSearchingMessage }}</h2> -->
                          <div class="flex justify-center">
                              <img src="../assets/Qr Code.gif" class="w-20" alt="">
                          </div>
@@ -104,38 +102,11 @@
                         </h2>
                         <LoaderDots v-show="isSearchingCode && barcodeValue"/>
                     </div>
-                    <!-- <div class="absolute bottom-0 flex items-center justify-around w-full px-2 bg-white rounded-tr-md rounded-tl-md min-h-11 ">
-                        <div class="flex items-center justify-center gap-1">
-                                <input @blur="autoFocus" @input="scanResult" v-model="barcodeValue" ref="barcodeInput"
-                                class="text-xl font-semibold text-center rounded-md shadow-sm outline-none placeholder:text-slate-100 text-white bg-slate-900 font-poppins min-w-28 max-w-[350px]"
-                                type="text" placeholder="Escanear o ingresar">
-                                <v-icon  
-                                    @click="clearBarcode"
-                                    class="cursor-pointer active:text-red-900 hover:text-red-500 hover:scale-110"
-                                    name="ri-delete-back-2-fill" scale="1.5" color="#c41306" />
-                        </div>
-                        <div>
-                            <div :class="{'bg-red-900 hover:bg-red-600' : !isDeletionActive, 'bg-sky-700 hover:bg-sky-600': isDeletionActive}" class="px-4 py-2 font-medium text-white transition duration-150 ease-in-out rounded-lg cursor-pointer font-poppins"
-                            @click="toggleIsDelectionActive"
-                            >
-                            <p v-if="!isDeletionActive">Eliminar producto</p>
-                            <p v-if="isDeletionActive">Desactivar eliminación</p>
-                        </div>
-                        </div>
-                        <div>
-                            <button class="px-4 py-2 text-white transition duration-150 ease-in-out rounded-lg bg-emerald-600 hover:bg-emerald-500 font-poppins"
-                            >Vender</button>
-                        </div>
-                        <div>
-                            <h3 class="p-1 px-2 text-xl font-semibold text-white rounded-md font-poppins bg-sky-800">Total: ${{ itemStore.getTotalCartPrice }}
-                            </h3>
-                        </div>
-                    </div> -->
                     <div class="absolute bottom-0 flex items-center justify-around w-full px-2 bg-white rounded-tr-md rounded-tl-md min-h-11 ">
                         <div class="flex items-center justify-center gap-1">
-                            <input @blur="autoFocus" @input="scanResult" v-model="barcodeValue" ref="barcodeInput"
+                            <input @input="scanResult" v-model="barcodeValue" ref="barcodeInput"
                             class="text-lg font-semibold text-center rounded-md shadow-sm outline-none hover:border  placeholder:text-gray-100 text-white bg-cyan-800 font-poppins min-w-28 max-w-[350px]"
-                            type="text" placeholder="Escanear o ingresar">
+                            type="text" placeholder="Escanear o ingresar" readonly>
                             <v-icon  
                                 @click="clearBarcode"
                                 class="cursor-pointer active:text-cyan-700 hover:text-cyan-500 hover:scale-110"
@@ -181,7 +152,7 @@ const itemStore = UseItemsStore();
 // system Store
 const systemValues = UseSystemValues();
 
-let barcodeValue = ref(); // reference to the barcode input element 
+let barcodeValue = ref(''); // reference to the barcode input element 
 let isSearchingCode = ref(false); // boolean that will be used to show/hide the loading animation (scanResult function)
 let isSearchingMessage = ref(''); // message that will be used to show/hide the loading animation (scanResult function)
 
@@ -212,7 +183,7 @@ const scanResult = ( ) => {
     const foundItems = itemStore.getTotalItems.filter(e => e.itemCode.toUpperCase() == barcodeValue.value.toUpperCase());
     // if the item is out of stock
     if(foundItems.length>0 && foundItems[0].stock == 0){
-        barcodeValue.value = null;
+        barcodeValue.value = '';
         isSearchingCode.value = false;
         systemValues.setIsOutOfStockScanView(true)
         itemName.value = foundItems[0].itemName;
@@ -223,7 +194,7 @@ const scanResult = ( ) => {
     if (foundItems.length > 0) { // if the item was found on the system
         const foundItemCart = itemStore.getCartItems.filter(e => e.itemCode == foundItems[0].itemCode);
         if(foundItemCart.length >0 && foundItemCart[0].stock ===0 ){
-            barcodeValue.value = null;
+            barcodeValue.value = '';
             itemName.value = foundItemCart[0].itemName;
             itemCode.value = foundItemCart[0].itemCode;
             isSearchingCode.value = false;
@@ -234,35 +205,34 @@ const scanResult = ( ) => {
             foundItemCart[0].stock--;
             foundItemCart[0].itemQuantity++;
             foundItemCart[0].itemSubtotal = foundItemCart[0].itemQuantity * Number(foundItemCart[0].itemPrice); 
-            barcodeValue.value = null;
+            barcodeValue.value = '';
             isSearchingCode.value = false;            
     } else if (foundItemCart.length == 0) { // if the item was not found in the cart, adding it as new
             itemStore.addItemToCart(foundItems[0])
-            barcodeValue.value = null;
+            barcodeValue.value = '';
             isSearchingCode.value = false;
     }
-    else{
-        timeoutId.value = setTimeout(() => {
-            isSearchingCode.value = false;
-            isError.value = true;
-            errorMessage.value = 'No se ha encontrado el producto. Por favor, revise el código o añádalo como nuevo producto si no está registrado.';
-        }, 2000)
-    }
+}
+else{
+    timeoutId.value = setTimeout(() => {
+        isSearchingCode.value = false;
+        isError.value = true;
+        errorMessage.value = `No se ha encontrado el producto con el codigo: '${barcodeValue.value}'. Por favor, revise el código o añádalo como nuevo producto si no está registrado.`;
+        showToastError(errorMessage.value, 15000)
+    }, 2000)
     console.log('Total items', itemStore.getTotalItems);    
 }
 }
 
 // function to clear the barcode value
 const clearBarcode = () => {
-    barcodeValue.value = null;
+    barcodeValue.value = barcodeValue.value.slice(0, -1);
     isError.value = false;
     errorMessage.value = '';
     isSearchingCode.value = false;
 }
  //function to focus on the barcode input element
-    const autoFocus = () => {
-    // if (barcodeInput.value) barcodeInput.value.focus();
-};
+
 
 //value to set the delete item from cart (boolean) that will show the delete icon
 let isDeletionActive = ref(false);
@@ -270,12 +240,18 @@ let isDeletionActive = ref(false);
 // toogle the isDeletionActive value to show/hide the button to delete item form list
 const toggleIsDelectionActive = () => isDeletionActive.value = !isDeletionActive.value;
 
-// error toasts (visual)
 
+// error toast (visual)
 const showToastWarning = () => {
     toast('Necesitas tener al menos un item en tu carrito', {
         type: 'warning',
         autoClose: 3000,
+      });
+}
+const showToastError = (error:string,timeout:number) => {
+    toast(error, {
+        type: 'warning',
+        autoClose: timeout,
       });
 }
 
@@ -285,22 +261,42 @@ const handleSave =():void=> {
         showToastWarning();
         return;
     }
-    systemValues.setIsSaleConfirmationView(true);
+    try {
+        systemValues.setIsSaleConfirmationView(true);
+        systemValues.setIsWindowKeyDownListener(false);
+    } catch (error) {
+        showToastError('Hubo un error, vuelva a intentarlo',3000);
+    }
 }
+// barcode input reference 
 const barcodeInput = ref();
+
+// function to execute when the user types in the barcode input
+const handleKeypress = (event: KeyboardEvent) => {
+    if(!systemValues.getIsWindowKeyDownListenerActive) return;
+    // Validate if the key pressed is alphanumeric
+    const alphanumericRegex = /^[a-zA-Z0-9]$/;
+    // if key pressed is backspace, clear the barcode value
+    if (event.key === 'Backspace') { 
+    barcodeValue.value = barcodeValue.value.slice(0, -1).toString();
+    }
+    if (alphanumericRegex.test(event.key)) {
+        barcodeValue.value += event.key; // If the key pressed is alphanumeric, add it to the barcode value
+        scanResult();
+    }
+};
 onMounted( () =>{
-    autoFocus();
+        systemValues.setIsWindowKeyDownListener(true);
+        if(systemValues.getIsWindowKeyDownListenerActive) window.addEventListener('keydown', handleKeypress); // Listen for keydown events
+
 })
 
 onUnmounted(() => {
-    if(timeoutId.value){
-        clearTimeout(timeoutId.value)
-    }
+    if(timeoutId.value) clearTimeout(timeoutId.value);
+    window.removeEventListener('keydown', handleKeypress);
+    systemValues.setIsWindowKeyDownListener(false);
 })
 
-const number = 4;
-
-console.log((number % 2 == 0) ? 'Even' : 'Odd')
 </script>
 
 <style scoped>

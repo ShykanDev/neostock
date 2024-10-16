@@ -58,7 +58,10 @@ const userPayment = ref();
 let userChange =computed(()=> userPayment.value - props.total);
 let leftMoney = computed(()=> props.total - userPayment.value);
 // function to cancel the sale and set the isSaleConfirmationView to false
-const cancelSale = ():void => systemValues.setIsSaleConfirmationView(false);
+const cancelSale = ():void => {
+    systemValues.setIsSaleConfirmationView(false);
+    systemValues.setIsWindowKeyDownListener(true);
+}
 // value to reference the input
 const inputUserPayment = ref();
 // function to focus the input that will be used when this component is visible (itemStore.getIsSaleConfirmationView)
@@ -79,6 +82,7 @@ const confirmSale = (): void => {
             itemStore.clearCart();
             showToastSuccess();
             systemValues.setIsSaleConfirmationView(false);
+            systemValues.setIsWindowKeyDownListener(true);
             return;
         }
     } catch (error) {

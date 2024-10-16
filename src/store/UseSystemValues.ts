@@ -4,7 +4,8 @@ export const UseSystemValues = defineStore('UseSystemValues', ({
     state() {
         return {
         showAddStockScanView: false,        
-        showSaleConfirmationView: false,    
+        showSaleConfirmationView: false,
+        isWindowKeyDownListener:false    
         }
     },
     getters:{
@@ -13,6 +14,9 @@ export const UseSystemValues = defineStore('UseSystemValues', ({
         },
         getIsSaleConfirmationView():boolean{
             return this.showSaleConfirmationView
+        },
+        getIsWindowKeyDownListenerActive():boolean{
+            return this.isWindowKeyDownListener;
         }
     },
     actions: {
@@ -21,6 +25,9 @@ export const UseSystemValues = defineStore('UseSystemValues', ({
         },
         setIsSaleConfirmationView(value:boolean){
             this.showSaleConfirmationView = value
+        },
+        setIsWindowKeyDownListener(payload:boolean):void{
+            this.isWindowKeyDownListener = payload;
         }
     }
 }))
