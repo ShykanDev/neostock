@@ -25,7 +25,7 @@ import CardProduct from '@/components/Home/CardProduct.vue';
 import { IItem } from '@/interfaces/IItem';
 import MainLayout from '@/layouts/MainLayout.vue';
 import { UseItemsStore } from '@/store/UseItemsStore';
-import { onMounted, Ref, ref } from 'vue';
+import { onMounted, onUnmounted, Ref, ref } from 'vue';
 
 const itemStore = UseItemsStore();
 
@@ -36,7 +36,7 @@ let searchResult: Ref<IItem[]> = ref(itemStore.getTotalItems);
 let searchFilter = ref('');
 
 // function to filter the items by name 
-const filterItems = () => searchResult.value = itemStore.getTotalItems.filter((item) => item.itemName.toLowerCase().includes(searchFilter.value.toLowerCase()));
+const filterItems = () => searchResult.value = itemStore.getTotalItems.map(item => item).filter((item) => item.itemName.toLowerCase().includes(searchFilter.value.toLowerCase()));
 
 // ref for input search
 const inputSearch = ref();
@@ -48,6 +48,10 @@ const focusInput =():void => {
 
 onMounted(() => {
     focusInput();
+    searchResult.value = itemStore.getTotalItems;
+})
+
+onUnmounted(() => {
     searchResult.value = itemStore.getTotalItems;
 })
 </script>

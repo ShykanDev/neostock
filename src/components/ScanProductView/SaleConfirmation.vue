@@ -26,6 +26,7 @@
 </template>
 
 <script lang="ts" setup>
+import { UseHistoryStore } from '@/store/UseHistoryStore';
 import { UseItemsStore } from '@/store/UseItemsStore';
 import { UseSystemValues } from '@/store/UseSystemValues';
 import { computed, defineProps, onMounted, ref } from 'vue';
@@ -34,7 +35,7 @@ import "vue3-toastify/dist/index.css";
 
 const showToastSuccess = () => {
     toast('La venta se realizo con exito!', {
-        type: 'success',
+        type: 'default',
         autoClose: 3000,
       });
 }
@@ -46,6 +47,7 @@ const showToastError = () => {
 }
 const systemValues = UseSystemValues();
 const itemStore = UseItemsStore();
+const historyStore = UseHistoryStore();
 // prop received from ScanProductView (total of the sale)
 const props = defineProps({
     total:{
@@ -79,6 +81,9 @@ const confirmSale = (): void => {
         }
         if (userPayment.value >= props.total) {
             itemStore.editTotalStock();
+            historyStore.pushToHistorySales(itemStore.getCartItems);
+            historyStore.pushDateToHistorySales(new Date().toLocaleString());
+            historyStore.pushToGrandTotalHistory(itemStore.getTotalCartPrice);
             itemStore.clearCart();
             showToastSuccess();
             systemValues.setIsSaleConfirmationView(false);
