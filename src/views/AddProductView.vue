@@ -45,6 +45,7 @@
                                     <input
                                         v-model="itemStockToAdd"
                                         @input="updateNewItem('stock')"
+                                        @keypress.enter="saveInfo"
                                         class="w-full max-w-md p-3 mt-2 font-medium text-center bg-white border rounded-lg font-poppins border-sky-600 focus:outline-none text-sky-800 placeholder:text-center placeholder:text-slate-500"
                                         type="number" placeholder="Ingrese la existencia del producto" min="1">
                                 </div>
