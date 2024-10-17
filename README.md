@@ -15,6 +15,7 @@
 
 The application is built with modern technologies, including **TypeScript**, **Tailwind CSS**, and incorporates end-to-end testing using **Cypress**. As a Single Page Application (SPA), it leverages the **Vue 3 Composition API** and **Router Link** for streamlined navigation.
 
+Link : https://shykandev.github.io/neostock/
 ---
 
 **NeoStock** es una Aplicación Web Progresiva (PWA) diseñada para funcionar como un sistema de gestión de inventario offline. Con soporte integrado para un lector de códigos de barras, NeoStock puede conectarse y reconocer valores del escáner, permitiendo una comparación fluida con la base de datos. Si un ítem existe en la base de datos, se muestra información esencial, incluyendo el stock restante, precio unitario y el subtotal del producto.
@@ -30,7 +31,7 @@ The application is built with modern technologies, including **TypeScript**, **T
 
 La aplicación está construida con tecnologías modernas, incluyendo **TypeScript**, **Tailwind CSS**, y se incorpora pruebas de extremo a extremo usando **Cypress**. Como una Aplicación de Una Sola Página (SPA), aprovecha la **Composition API de Vue 3** y **Router Link** para una navegación fluida.
 
-
+Link : https://shykandev.github.io/neostock/
 ## Project setup
 ```
 npm install
