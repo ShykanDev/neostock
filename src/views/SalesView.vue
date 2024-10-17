@@ -17,7 +17,7 @@
                             <h3 class="mb-2 text-sm font-semibold text-sky-800 font-poppins">
                                Fecha: {{ UseHistoryStore().getDateHistorySales[index] }}
                             </h3>
-                            <h4>Total: ${{ UseHistoryStore().getGrandTotalHistory[index] }}</h4>
+                            <h4 class="inline-block px-2 mb-2 text-sm font-semibold text-white bg-emerald-700 rounded-xl font-poppins">Total: ${{ UseHistoryStore().getGrandTotalHistory[index] }}</h4>
                             <!-- Items -->
                             <div v-for="(item2, index2) in item" :key="index2"
                                 class="p-2 mb-2 ml-4 bg-gray-100 rounded-lg shadow-sm">

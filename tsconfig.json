@@ -34,7 +34,7 @@
     "src/**/*.vue",
     "tests/**/*.ts",
     "tests/**/*.tsx"
-  ],
+, "tests/e2e/specs/homepage.cy.js"  ],
   "exclude": [
     "node_modules"
   ]

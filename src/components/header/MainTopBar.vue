@@ -5,12 +5,12 @@
         </div>
         <!-- Section of all views -->
         <article class="flex flex-col flex-wrap items-start gap-3 p-2 font-semibold select-none font-poppins">
-            <RouterLink :class="{ 'bg-sky-950 text-white': route.name === 'scan' }" :to="{ name: 'scan' }"
+            <RouterLink :class="{ 'bg-sky-950 text-white': route.name === 'scan' }" :to="{ name: 'scan' }" data-cy="routerScanProduct"
                 class="flex items-center w-full gap-1 p-1 transition-all duration-150 ease-out rounded-md text-slate-800 hover:bg-sky-800 hover:text-white hover:shadow-sm hover:cursor-pointer">
                 <v-icon name="bi-upc-scan" scale="2" :color="route.name === 'scan' ? 'white' : 'black'" />
                 <p>Escanear Producto</p>
             </RouterLink>
-            <RouterLink :class="{ 'bg-sky-950 text-white': route.name === 'home' }" :to="{ name: 'home' }"
+            <RouterLink :class="{ 'bg-sky-950 text-white': route.name === 'home' }" :to="{ name: 'home' }" data-cy="routerProducts"
                 class="flex items-center w-full gap-1 p-1 transition-all duration-150 ease-out rounded-md text-slate-800 hover:bg-sky-800 hover:text-white hover:shadow-sm hover:cursor-pointer">
                 <v-icon name="md-dashboard-round" scale="2" :color="route.name === 'home' ? 'white' : 'black'" />
                 <p>Productos</p>
